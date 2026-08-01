@@ -1,15 +1,13 @@
 # Decap CMS — NegoAsia
 #
-# Repo set to negoasia-web/negoasia-web on 2026-08-01. That owner is a personal
-# GitHub account, not an organisation.
+# Repo set to negoasia-web/negoasia-web (GitHub org) on 2026-08-01.
 #
 # Remaining setup, done once in Netlify:
 #   Site configuration → Access & security → OAuth → Install provider → GitHub
 # That is what lets Nicolas log in at /admin/ with his GitHub account.
 #
-# The repo is PUBLIC: anyone can read it, so nothing secret may ever be committed
-# here. Writing is what needs permission — add Nicolas under Settings →
-# Collaborators on GitHub when he is ready to publish.
+# The repo is private, so anyone who edits content must be a collaborator on it.
+# Add Nicolas under Settings → Collaborators on GitHub when he is ready to publish.
 
 backend:
   name: github

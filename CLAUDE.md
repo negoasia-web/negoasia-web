@@ -30,7 +30,8 @@ content/pages/*.json      ← métadonnées SEO des 7 pages fixes (idem)
 templates/                ← gabarits article + index Insights
 build.py                  ← content/ + templates/ → site/
 site/                     ← ce qui est publié (HTML généré ET pages écrites à la main)
-verify.py                 ← captures desktop/mobile, liens, erreurs JS
+verify.py                 ← captures desktop/mobile, liens, erreurs JS (LECTURE SEULE)
+make_og.py                ← régénère l'image de partage Open Graph
 audit.py                  ← contrôle SEO technique + densité de tirets cadratins
 ```
 
@@ -61,7 +62,10 @@ Les pages Home, About, Services, Contact, Terms, Privacy, `/ai/` et 404 sont du 
 6. **Le sélecteur de langue** (`.lang` dans l'en-tête) affiche EN actif et FR inerte.
    En phase 2, FR devient un lien vers `/fr/` et le `<span class="soon">` devient un `<a>`.
    Codes texte et non drapeaux : un drapeau désigne un pays, pas une langue.
-7. **Sur Windows** : `git config core.fileMode false` est déjà posé, sinon OneDrive fait
+7. **`verify.py` ne doit jamais écrire dans `site/`.** Il générait autrefois l'image
+   Open Graph et l'écrasait silencieusement à chaque exécution ; ce travail est passé
+   dans `make_og.py`. Un script de vérification qui modifie ce qu'il vérifie ment.
+8. **Sur Windows** : `git config core.fileMode false` est déjà posé, sinon OneDrive fait
    apparaître tous les fichiers comme modifiés.
 
 ## Design system

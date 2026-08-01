@@ -504,3 +504,14 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
       height:1px;background:var(--gold)}
 .lang .soon{color:var(--muted);opacity:.45;cursor:default}
 @media (max-width:960px){ .lang{margin-left:auto;margin-right:.4rem} }
+
+/* ============================================================
+   Cut-out portrait. The file has a transparent background, so it
+   sits directly on the navy with no frame and no stripes — the
+   subject reads as grounded rather than pasted into a box.
+   ============================================================ */
+.photo.cutout{background:none;border:0;align-items:flex-end;justify-content:center;overflow:visible}
+.photo.cutout img{width:100%;height:100%;object-fit:contain;object-position:bottom center}
+/* Round author thumbnail: crop to the face, on a navy disc. */
+.author .photo.cutout{background:var(--slate-800);border:1px solid var(--line);overflow:hidden}
+.author .photo.cutout img{object-fit:cover;object-position:center}

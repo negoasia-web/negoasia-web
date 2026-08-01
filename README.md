@@ -33,7 +33,8 @@ NegoAsia-Projet.md        project file — git-ignored: it holds pricing strateg
 ```bash
 python3 build.py            # regenerate article pages + the Insights index
 python3 build.py --check    # report what would change, write nothing
-python3 verify.py           # screenshot all pages, check links and JS errors
+python3 verify.py           # screenshot all pages, check links and JS errors (read-only)
+python3 make_og.py          # re-render the Open Graph share image
 ```
 
 `build.py` is idempotent: running it on unchanged content prints

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Render the OG image and screenshot every page (desktop + mobile) for review."""
+"""Screenshot every page (desktop + mobile), check links and console errors.
+
+Read-only by design: this script must never write into site/. Generating the
+Open Graph image used to live here and silently overwrote it on every run —
+that job now belongs to make_og.py."""
 import http.server, socketserver, threading, functools, pathlib, sys
 from playwright.sync_api import sync_playwright
 
@@ -45,47 +49,8 @@ PAGES = [
     ("404", "/404.html"),
 ]
 
-OG_HTML = """<!DOCTYPE html><html><head><meta charset="utf-8">
-<link rel="stylesheet" href="__CSS__">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{width:1200px;height:630px;background:#152238;color:#fff;font-family:"Libre Franklin",sans-serif;
-     padding:82px 88px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-body::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 14px,rgba(255,255,255,.045) 14px 28px);pointer-events:none}
-.top{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
-.top svg{width:44px;height:44px;color:#3B78E6}
-.wm{font-family:"Archivo",sans-serif;font-size:1.7rem;letter-spacing:.05em}
-.wm .t{font-weight:500}.wm b{font-weight:800}
-.eyebrow{font-size:.9rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#D8BE8A;margin-bottom:26px;display:block}
-h1{font-family:"Archivo",sans-serif;font-weight:900;font-size:4.3rem;line-height:1.03;letter-spacing:-.02em;max-width:17ch}
-h1 .c{color:#D8BE8A}
-.mid{position:relative;z-index:1}
-.bot{border-top:1px solid rgba(255,255,255,.16);padding-top:26px;display:flex;gap:44px;
-     font-size:.82rem;letter-spacing:.16em;text-transform:uppercase;color:#D8BE8A;font-weight:700;position:relative;z-index:1}
-</style></head><body>
-<div class="top">
-  <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M15 35 V18 a4.2 4.2 0 0 1 7.4 -2.7 L32 27"/><path d="M33 13 V30 a4.2 4.2 0 0 1 -7.4 2.7 L16 21"/>
-  </svg>
-  <span class="wm"><span class="t">NEGO</span><b>ASIA</b></span>
-</div>
-<div class="mid">
-  <span class="eyebrow">Negotiation advisory · Asia &amp; beyond</span>
-  <h1><span class="c">Control</span> your negotiations, or someone else will.</h1>
-</div>
-<div class="bot"><span>LinkedIn Top Voice</span><span>TEDx Speaker</span><span>Stanford SDRM</span><span>Hall of Fame</span></div>
-</body></html>"""
-
 with sync_playwright() as p:
     b = p.chromium.launch()
-
-    # --- Open Graph image, rendered with the real brand fonts ---
-    pg = b.new_page(viewport={"width": 1200, "height": 630}, device_scale_factor=1)
-    pg.set_content(OG_HTML.replace("__CSS__", BASE + "/assets/css/site.css"))
-    pg.wait_for_timeout(2500)
-    pg.screenshot(path=str(SITE / "assets/img/og-default.png"))
-    pg.close()
-    print("og-default.png rendered")
 
     errors = []
     for name, path in PAGES:

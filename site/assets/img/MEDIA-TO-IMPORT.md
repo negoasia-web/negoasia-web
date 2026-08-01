@@ -18,9 +18,16 @@ stop working and the originals are only recoverable from the WordPress backup.
 | `10-rules.webp` | https://www.negoasia.com/wp-content/uploads/2023/09/Rectangle-21-1.webp | `/management-tricks/` (hero), `/blog/` (card) |
 | `logo-negoasia.webp` | https://www.negoasia.com/wp-content/uploads/2023/09/Group-11-min.webp | old site logo — for reference only |
 
+## Received
+
+- ✅ **Professional portrait** — `blog/nicolas-clement-image.webp`, 1707 × 2560, cut out
+  on a transparent background. Uploaded through the CMS media library on 2026-08-01.
+  In use on the About hero, the home Expert section, every article author box, and the
+  Open Graph share image. A 320 × 320 face crop is derived from it at
+  `nicolas-portrait-square.webp` — regenerate it if the source portrait ever changes.
+
 ## Still needed from Nicolas (not on the old site)
 
-- Professional portrait, high resolution — **priority #1** for the premium feel.
-- Atmosphere photos: in session, on stage, in the boardroom, in Asia.
+- Atmosphere photos: in session, on stage, in the boardroom, in Asia. One slot is still
+  a placeholder, in the Credentials section of the About page.
 - Vector logo (SVG / AI / EPS).
-- A real Open Graph image (1200 × 630) to replace `assets/img/og-default.png`.
