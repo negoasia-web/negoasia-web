@@ -1,0 +1,9 @@
+# PREVIEW MODE — the whole site is blocked from indexing.
+# ⚠️ BEFORE GO-LIVE: replace the block below with
+#     User-agent: *
+#     Disallow: /admin/
+# and keep the sitemap line. Forgetting this keeps negoasia.com out of Google.
+User-agent: *
+Disallow: /
+
+Sitemap: https://www.negoasia.com/sitemap.xml

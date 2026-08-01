@@ -1,0 +1,23 @@
+# ── Internal — never push these ──────────────────────────────────────────────
+# Commercial documents: quotes, proposals, pricing.
+commercial/
+
+# Working documents that contain pricing strategy, client notes, the risk
+# register and internal reminders. They stay on Bruno's disk and in the Claude
+# project. Keeping them out of the repo matters twice over: the repo is a
+# client deliverable that will be handed to Nicolas, and these are notes
+# *about* him, not *for* him.
+NegoAsia-Projet.md
+Message-a-Nicolas.md
+
+# ── Local working files ─────────────────────────────────────────────────────
+_to_delete/
+_new/
+shots/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+node_modules/
+.netlify/
+*.zip

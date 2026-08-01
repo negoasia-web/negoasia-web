@@ -1,0 +1,121 @@
+# Decap CMS — NegoAsia
+#
+# Repo set to negoasia-web/negoasia-web (GitHub org) on 2026-08-01.
+#
+# Remaining setup, done once in Netlify:
+#   Site configuration → Access & security → OAuth → Install provider → GitHub
+# That is what lets Nicolas log in at /admin/ with his GitHub account.
+#
+# The repo is private, so anyone who edits content must be a collaborator on it.
+# Add Nicolas under Settings → Collaborators on GitHub when he is ready to publish.
+
+backend:
+  name: github
+  repo: negoasia-web/negoasia-web
+  branch: main
+  commit_messages:
+    create: 'Add article "{{slug}}"'
+    update: 'Update article "{{slug}}"'
+    delete: 'Delete article "{{slug}}"'
+
+# Draft → In review → Ready. Nothing goes live until it is published.
+publish_mode: editorial_workflow
+
+media_folder: "site/assets/img/blog"
+public_folder: "/assets/img/blog"
+
+site_url: https://www.negoasia.com
+display_url: https://www.negoasia.com
+logo_url: https://www.negoasia.com/assets/img/favicon.svg
+
+locale: en
+
+collections:
+  - name: articles
+    label: Insights
+    label_singular: Article
+    description: >
+      Articles published at negoasia.com. The URL is built from the title —
+      changing the title of an existing article changes its URL, so avoid it
+      on articles that are already indexed by Google.
+    folder: content/articles
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: yaml-frontmatter
+    preview_path: "{{slug}}/"
+    summary: "{{title}} — {{date | date('MMM D, YYYY')}}"
+    sortable_fields: [date, title]
+    view_filters:
+      - label: Method
+        field: tag
+        pattern: Method
+      - label: Asia
+        field: tag
+        pattern: Asia
+    fields:
+      - label: Title
+        name: title
+        widget: string
+        hint: Shown as the page heading and in Google results. Aim for under 60 characters.
+
+      - label: Publication date
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+        hint: Controls the order on the Insights page. The most recent article is featured.
+
+      - label: Topic
+        name: tag
+        widget: select
+        options: [Method, Asia, Teams, Talks]
+        default: Method
+        hint: Used for the filter buttons on the Insights page.
+
+      - label: Standfirst
+        name: standfirst
+        widget: string
+        hint: The one-line intro under the title, on the dark banner. One sentence.
+
+      - label: SEO description
+        name: description
+        widget: text
+        hint: >
+          What Google and AI assistants show as the summary. 140–160 characters,
+          written as a full sentence. This is not displayed on the page itself.
+
+      - label: Featured image
+        name: image
+        widget: image
+        required: false
+        hint: Leave empty to show the striped placeholder. Ideal size 1600 × 900.
+
+      - label: Image caption
+        name: image_caption
+        widget: string
+        required: false
+        hint: Also used as the image's alt text, so describe what is in it.
+
+      - label: Original image URL
+        name: image_source
+        widget: string
+        required: false
+        hint: Internal note — where the image came from. Never displayed.
+
+      - label: Body
+        name: body
+        widget: markdown
+        hint: >
+          Headings, bold, italic, lists, quotes and links. Use "Heading 2" for
+          section titles — Heading 1 is reserved for the article title above.
+        buttons: [bold, italic, link, heading-two, heading-three, quote,
+                  bulleted-list, numbered-list]
+        editor_components: []
+
+# ── Note for later ──────────────────────────────────────────────────────────
+# A second collection can be added so Nicolas edits the Home / About / Services
+# copy himself. That requires turning those pages into templates + content files
+# the same way articles work. Deliberately left out of this first pass: articles
+# are what he will actually publish week to week.

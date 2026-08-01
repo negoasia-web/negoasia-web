@@ -1,0 +1,45 @@
+# NegoAsia — Netlify configuration
+#
+# The site is plain static HTML. The build step exists only to regenerate the
+# article pages and the Insights index from content/articles/*.md, so that what
+# Nicolas writes in the CMS actually appears on the site.
+#
+# The generated HTML is also committed to the repo, which means a drag-and-drop
+# deploy of the `site/` folder still works if the build ever needs bypassing.
+
+[build]
+  publish = "site"
+  command = "python3 build.py"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+
+# ---------------------------------------------------------------- headers
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+
+# Fonts, CSS, JS and images are content-addressed by deploy — cache them hard.
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# The CMS must never be indexed.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Redirects live in site/_redirects — kept there so a drag-and-drop deploy
+# (which ignores this file) still applies them.

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NegoAsia — Control your negotiations, or someone else will</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --slate-900:#152238;
+  --slate-800:#1B2B44;
+  --slate-700:#22344F;
+  --gold:#C2A063;
+  --gold-2:#D8BE8A;
+  --blue:#3B78E6;        /* NegoAsia brand mark */
+  --ivory:#F4EFE4;       /* warm cream */
+  --ivory-2:#FAF6EC;
+  --ink:#1D2636;
+  --muted:#6A7080;
+  --line:rgba(29,38,54,.14);
+  --line-gold:rgba(194,160,99,.45);
+  --line-dark:rgba(255,255,255,.14);
+  --maxw:1200px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"Libre Franklin",system-ui,sans-serif;color:var(--ink);background:var(--ivory-2);line-height:1.68;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Archivo",system-ui,sans-serif;font-weight:800;line-height:1.06;letter-spacing:-.02em}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 34px}
+
+/* Eyebrow — gold, tracked (Benoit signature) */
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);display:inline-block;margin-bottom:1.5rem}
+.on-dark .eyebrow{color:var(--gold-2)}
+
+/* Photo slot */
+.photo{position:relative;border:1px solid var(--line);border-radius:2px;overflow:hidden;background:
+  repeating-linear-gradient(135deg,rgba(29,38,54,.03) 0 12px,rgba(29,38,54,.05) 12px 24px);
+  display:flex;align-items:center;justify-content:center}
+.photo.dark{border-color:var(--line-dark);background:
+  repeating-linear-gradient(135deg,rgba(255,255,255,.03) 0 12px,rgba(255,255,255,.05) 12px 24px)}
+.photo .plabel{text-align:center;padding:20px}
+.photo .plabel .dot{width:9px;height:9px;border-radius:50%;background:var(--gold);margin:0 auto .8rem}
+.photo .plabel b{display:block;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.photo .plabel span{font-size:.82rem;color:var(--muted);font-style:italic}
+.on-dark .photo .plabel span{color:rgba(255,255,255,.5)}
+
+/* Logo */
+.brand{display:flex;align-items:center;gap:12px}
+.brand .mk{width:32px;height:32px;flex:none;color:var(--blue)}
+.brand .wm{font-family:"Archivo",sans-serif;font-size:1.24rem;letter-spacing:.04em}
+.brand .wm b{font-weight:800}.brand .wm .t{font-weight:500}
+
+/* Header — light cream (Benoit) */
+header{position:fixed;top:0;left:0;right:0;z-index:50;padding:20px 0;background:var(--ivory);border-bottom:1px solid transparent;transition:box-shadow .35s,padding .35s,border-color .35s}
+header.scrolled{padding:13px 0;box-shadow:0 1px 20px rgba(29,38,54,.08);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.nav .brand .wm{color:var(--ink)}
+.menu{display:flex;align-items:center;gap:2.2rem}
+.menu a{color:var(--ink);font-size:.92rem;font-weight:600;transition:color .2s}
+.menu a:hover{color:var(--gold)}
+.btn{display:inline-block;white-space:nowrap;font-weight:700;font-size:.86rem;letter-spacing:.02em;padding:.85em 1.6em;border-radius:2px;transition:all .25s;cursor:pointer;border:1px solid transparent;font-family:"Libre Franklin",sans-serif}
+.btn-primary{background:var(--gold);color:var(--slate-900)}
+.btn-primary:hover{background:#b08f52}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.35)}
+.btn-ghost:hover{border-color:var(--gold-2);color:var(--gold-2)}
+.btn-outline-dark{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-outline-dark:hover{border-color:var(--gold);color:var(--gold)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:0;cursor:pointer;padding:6px}
+.hamburger span{width:24px;height:2px;background:var(--ink);display:block}
+
+/* Hero — solid slate, photo right */
+.hero{background:var(--slate-900);color:#fff;padding:150px 0 0;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;padding-bottom:60px}
+.hero h1{font-size:clamp(2.5rem,5vw,4.1rem);margin:.2rem 0 1.5rem;color:#fff;font-weight:900}
+.hero h1 .c{color:var(--gold-2)}
+.hero p.lead{font-size:1.16rem;color:rgba(255,255,255,.8);max-width:40ch;margin-bottom:2.2rem;line-height:1.62}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+.hero .photo{aspect-ratio:5/4;align-self:stretch}
+/* credential strip (Benoit city-row analogue) */
+.strip{border-top:1px solid var(--line-dark)}
+.strip-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.strip-grid .it{padding:26px 10px;text-align:center;border-right:1px solid var(--line-dark)}
+.strip-grid .it:last-child{border-right:0}
+.strip-grid .it b{display:block;font-family:"Archivo",sans-serif;font-weight:700;font-size:1rem;color:#fff}
+.strip-grid .it span{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);margin-top:.3rem;display:block}
+
+/* Section base */
+section{padding:104px 0}
+.sec-head{max-width:640px;margin-bottom:56px}
+.sec-head h2{font-size:clamp(2rem,3.6vw,2.95rem)}
+.sec-head p{color:var(--muted);font-size:1.06rem;margin-top:1rem}
+
+/* Problem */
+.problem{background:var(--ivory)}
+.problem-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.problem-aside h2{font-size:clamp(2rem,3.6vw,2.95rem);margin-bottom:1.2rem}
+.problem-aside p{color:var(--muted);font-size:1.06rem}
+.qlist{list-style:none;display:flex;flex-direction:column}
+.qlist li{padding:22px 0;border-top:1px solid var(--line);font-size:1.1rem;display:flex;gap:1.1rem;align-items:flex-start;line-height:1.5}
+.qlist li:last-child{border-bottom:1px solid var(--line)}
+.qlist li .q{font-family:"Archivo",sans-serif;color:var(--gold);font-size:.95rem;font-weight:700;flex:none;padding-top:.2em}
+
+/* Services */
+.services{background:var(--ivory-2)}
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--line);border-radius:2px;overflow:hidden;background:var(--line)}
+.svc{padding:46px 40px;background:var(--ivory-2);transition:background .3s}
+.svc:hover{background:#fff}
+.svc .idx{font-family:"Archivo",sans-serif;font-size:.78rem;letter-spacing:.16em;color:var(--gold);font-weight:700}
+.svc h3{font-size:1.5rem;margin:1.3rem 0 .8rem}
+.svc p{color:var(--muted);font-size:1rem}
+.svc .arrow{margin-top:1.6rem;color:var(--gold);font-weight:700;font-size:.86rem;letter-spacing:.02em;display:inline-flex;gap:.45rem;transition:gap .25s}
+.svc:hover .arrow{gap:.9rem}
+
+/* Expert */
+.expert{background:var(--slate-800);color:#fff}
+.expert-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:66px;align-items:center}
+.expert .photo{aspect-ratio:4/5}
+.expert h2{font-size:clamp(2rem,3.6vw,2.95rem);color:#fff;margin-bottom:1.6rem}
+.expert .name{font-family:"Archivo",sans-serif;font-weight:800;font-size:1.05rem;color:var(--gold-2);margin-bottom:.2rem}
+.expert .role{color:rgba(255,255,255,.6);font-size:.9rem;margin-bottom:1.8rem}
+.awards{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:.9rem 2rem}
+.awards li{font-size:.93rem;color:rgba(255,255,255,.85);display:flex;gap:.7rem;align-items:flex-start;line-height:1.4}
+.awards li::before{content:"";width:5px;height:5px;background:var(--gold);border-radius:50%;margin-top:.6em;flex:none}
+
+/* Stats */
+.stats{background:var(--slate-900);color:#fff;padding:78px 0;border-top:1px solid var(--line-dark)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center}
+.stat .k{font-family:"Archivo",sans-serif;font-weight:800;font-size:clamp(2.3rem,4vw,3.3rem);line-height:1;color:#fff}
+.stat .k em{color:var(--gold-2);font-style:normal}
+.stat .lbl{font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-2);margin-top:.7rem}
+.stat+.stat{border-left:1px solid var(--line-dark)}
+
+/* Trust */
+.trust{background:var(--ivory);text-align:center}
+.trust .sec-head{margin:0 auto 20px}
+.trust p.part{max-width:64ch;margin:0 auto 48px;color:var(--muted);font-size:1.06rem}
+.logos{display:flex;flex-wrap:wrap;gap:14px 46px;justify-content:center;align-items:center;padding-top:38px;border-top:1px solid var(--line)}
+.logos span{font-family:"Archivo",sans-serif;font-weight:700;font-size:1.28rem;color:#A8A090;letter-spacing:.02em;transition:color .25s}
+.logos span:hover{color:var(--ink)}
+
+/* Quotes */
+.quotes{background:var(--slate-800);color:#fff}
+.quotes-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.quote{border:1px solid var(--line-dark);border-radius:2px;padding:42px 40px;background:rgba(255,255,255,.02)}
+.quote .mk{font-family:"Archivo",sans-serif;font-size:3rem;color:var(--gold);line-height:.55;height:1.1rem;font-weight:800}
+.quote p{font-size:1.22rem;line-height:1.48;margin:1.1rem 0 1.8rem;color:#fff;font-family:"Archivo",sans-serif;font-weight:600;letter-spacing:-.01em}
+.quote .who b{display:block;font-size:.95rem;color:var(--gold-2)}
+.quote .who span{color:rgba(255,255,255,.6);font-size:.86rem}
+
+/* Insights */
+.insights{background:var(--ivory-2)}
+.posts{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.post{background:#fff;border:1px solid var(--line);border-radius:2px;overflow:hidden;transition:transform .3s,box-shadow .3s}
+.post:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(29,38,54,.1)}
+.post .thumb{aspect-ratio:16/10;background:
+  repeating-linear-gradient(135deg,rgba(29,38,54,.04) 0 12px,rgba(29,38,54,.07) 12px 24px);position:relative}
+.post .thumb::after{content:"PHOTO";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.68rem;letter-spacing:.2em;color:var(--gold);font-weight:700}
+.post .body{padding:26px 26px 30px}
+.post .date{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.post h3{font-size:1.24rem;margin:.8rem 0;line-height:1.2}
+.post .rd{color:var(--muted);font-size:.88rem;font-weight:700}
+
+/* Contact */
+.contact{background:var(--slate-900);color:#fff}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.contact h2{font-size:clamp(2rem,3.8vw,3rem);color:#fff;margin-bottom:1.4rem}
+.contact .jfk{font-family:"Archivo",sans-serif;font-weight:600;font-size:1.28rem;font-style:italic;color:rgba(255,255,255,.82);border-left:2px solid var(--gold);padding-left:1.3rem;margin:2.2rem 0;line-height:1.42;letter-spacing:-.01em}
+.contact .jfk cite{display:block;font-style:normal;font-size:.85rem;color:rgba(255,255,255,.5);margin-top:.7rem;font-family:"Libre Franklin",sans-serif;font-weight:400}
+.reassure{color:rgba(255,255,255,.68);font-size:.94rem;display:flex;gap:.5rem;align-items:center}
+.reassure::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold)}
+form{display:flex;flex-direction:column;gap:16px}
+.field label{display:block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:.5rem}
+.field input,.field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line-dark);border-radius:2px;padding:14px 16px;color:#fff;font-family:inherit;font-size:1rem;transition:border .2s,background .2s}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--gold);background:rgba(194,160,99,.08)}
+.field textarea{resize:vertical;min-height:110px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.formnote{font-size:.85rem;color:var(--gold-2);min-height:1.2em}
+
+/* Footer */
+footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34px;border-top:1px solid var(--line-dark)}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;padding-bottom:44px;border-bottom:1px solid var(--line-dark)}
+.foot-brand .brand{margin-bottom:1.2rem}
+.foot-brand .brand .wm{color:#fff}
+.foot-brand p{max-width:38ch;font-size:.94rem}
+.foot-col h4{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);margin-bottom:1.1rem;font-weight:700}
+.foot-col a{display:block;font-size:.92rem;margin-bottom:.6rem;transition:color .2s}
+.foot-col a:hover{color:#fff}
+.foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:26px;font-size:.84rem;flex-wrap:wrap;gap:12px}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media (max-width:960px){
+  .hero-grid,.problem-grid,.expert-grid,.contact-grid,.quotes-grid{grid-template-columns:1fr;gap:44px}
+  .hero{padding-top:120px}
+  .svc-grid{grid-template-columns:1fr}
+  .strip-grid{grid-template-columns:1fr 1fr}
+  .strip-grid .it:nth-child(2n){border-right:0}
+  .strip-grid .it:nth-child(-n+2){border-bottom:1px solid var(--line-dark)}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:34px}
+  .stat+.stat{border-left:0}
+  .stat:nth-child(3),.stat:nth-child(4){border-top:1px solid var(--line-dark);padding-top:34px}
+  .posts{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr;gap:32px}
+  .menu{display:none}.hamburger{display:flex}.nav-cta{display:none}
+  .awards{grid-template-columns:1fr}
+}
+@media (max-width:520px){.wrap{padding:0 22px}.row2{grid-template-columns:1fr}section{padding:74px 0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="nmark" viewBox="0 0 48 48">
+  <path d="M15 35 V18 a4.2 4.2 0 0 1 7.4 -2.7 L32 27" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M33 13 V30 a4.2 4.2 0 0 1 -7.4 2.7 L16 21" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+</defs></svg>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a class="brand" href="#top"><span class="mk"><svg width="32" height="32"><use href="#nmark"/></svg></span><span class="wm"><span class="t">NEGO</span><b>ASIA</b></span></a>
+    <nav class="menu"><a href="#problem">The problem</a><a href="#services">Services</a><a href="#expert">Expert</a><a href="#insights">Insights</a><a href="#contact">Contact</a></nav>
+    <a href="#contact" class="btn btn-primary nav-cta">Book a free audit</a>
+    <button class="hamburger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero on-dark" id="top">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <span class="eyebrow">Negotiation advisory · Asia &amp; beyond</span>
+      <h1><span class="c">Control</span> your negotiations, or someone else will.</h1>
+      <p class="lead">Stop letting the other side capture the value you create. We give leaders the mindset, method, and muscle to win the deals that matter.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn btn-primary">Book a free 30-min audit</a>
+        <a href="#services" class="btn btn-ghost">Explore our approach</a>
+      </div>
+    </div>
+    <div class="photo dark reveal"><div class="plabel"><div class="dot"></div><b>Photo</b><span>Boardroom / handshake / Nicolas at work</span></div></div>
+  </div>
+  <div class="strip">
+    <div class="wrap"><div class="strip-grid">
+      <div class="it"><b>LinkedIn Top Voice</b><span>Negotiation · 2023</span></div>
+      <div class="it"><b>TEDx Speaker</b><span>Shanghai · 2021</span></div>
+      <div class="it"><b>Stanford SDRM</b><span>97% in Negotiation</span></div>
+      <div class="it"><b>Hall of Fame</b><span>Consulting · 2022</span></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="wrap problem-grid">
+    <div class="problem-aside reveal">
+      <span class="eyebrow">The cost of leaking value</span>
+      <h2>Are you leaking value in your negotiations?</h2>
+      <p>Most leaders lose more at the table than they realise — one concession, one rushed “yes,” one fear-driven deal at a time. The first step is seeing where it happens.</p>
+    </div>
+    <ul class="qlist reveal">
+      <li><span class="q">01</span> Tired of being talked into “yes” by wolves in sheep's clothing?</li>
+      <li><span class="q">02</span> Conceding too early, then paying later with compound interest?</li>
+      <li><span class="q">03</span> Any idea what the fear of losing the deal is really costing you?</li>
+      <li><span class="q">04</span> Does needing to be right get in the way of durable agreements?</li>
+      <li><span class="q">05</span> What system keeps you in control of every negotiation?</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">How we work with you</span><h2>Build consistent negotiation success</h2><p>Four ways to sharpen your edge — from the individual leader to the whole commercial organisation.</p></div>
+    <div class="svc-grid reveal">
+      <div class="svc"><span class="idx">01 — COACHING</span><h3>Individual coaching</h3><p>Acquire the mindset and skills of negotiation pros, tailored to the deals in front of you right now.</p><span class="arrow">Learn more →</span></div>
+      <div class="svc"><span class="idx">02 — ASSISTANCE</span><h3>Negotiation assistance</h3><p>(Re)gain control of a live, high-stakes negotiation with a world-class strategist at your side.</p><span class="arrow">Learn more →</span></div>
+      <div class="svc"><span class="idx">03 — TRAINING</span><h3>Sales &amp; negotiation training</h3><p>Scale commercial excellence across your teams with proven, field-tested methods.</p><span class="arrow">Learn more →</span></div>
+      <div class="svc"><span class="idx">04 — PROGRAMS</span><h3>Customized programs</h3><p>Build a program around your sector, your stakes, and the way your organisation actually negotiates.</p><span class="arrow">Learn more →</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERT -->
+<section class="expert on-dark" id="expert">
+  <div class="wrap expert-grid">
+    <div class="photo dark reveal"><div class="plabel"><div class="dot"></div><b>Portrait</b><span>Nicolas Clement</span></div></div>
+    <div class="reveal">
+      <span class="eyebrow">A world-class expert at your service</span>
+      <h2>Two decades turning high-stakes tension into agreement</h2>
+      <div class="name">Nicolas Clement</div>
+      <div class="role">Founder &amp; General Manager, NegoAsia</div>
+      <ul class="awards">
+        <li>16 years of presence in Asia</li>
+        <li>LinkedIn Top Negotiation Voice, 2023</li>
+        <li>Million-Dollar Consulting Hall of Fame, 2022</li>
+        <li>CEIBS Visiting Professor in Negotiation, 2021</li>
+        <li>TEDx Speaker in Negotiation — Shanghai, 2021</li>
+        <li>Stanford SDRM — 97% in Negotiation</li>
+        <li>Master Team Member — Camp Negotiation Institute</li>
+        <li>MSc in Management — ESSEC Business School</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="wrap stats-grid">
+    <div class="stat reveal"><div class="k"><em>$</em>1B<em>+</em></div><div class="lbl">In negotiations coached</div></div>
+    <div class="stat reveal"><div class="k">16</div><div class="lbl">Years across Asia</div></div>
+    <div class="stat reveal"><div class="k">5,000<em>+</em></div><div class="lbl">People coached*</div></div>
+    <div class="stat reveal"><div class="k">40<em>+</em></div><div class="lbl">E-learning modules*</div></div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">The reach of a global group</span><h2>Global partner of Halifax Consulting</h2></div>
+    <p class="part reveal">Halifax Consulting is a leading European commercial-performance consultancy, present on every continent and training more than 10,000 people every year.</p>
+    <div class="logos reveal"><span>THALES</span><span>SAINT-GOBAIN</span><span>JCDecaux</span><span>Faurecia</span><span>AXA</span><span>Danieli</span><span>Media.Monks</span></div>
+  </div>
+</section>
+
+<!-- QUOTES -->
+<section class="quotes on-dark">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">In their words</span><h2 style="color:#fff">They recommend us</h2></div>
+    <div class="quotes-grid">
+      <div class="quote reveal"><div class="mk">“</div><p>A secret weapon every business leader should have — he sharpens your thinking and opens doors in your mind.</p><div class="who"><b>Rogier Bikker</b><span>Managing Director China, Media.Monks</span></div></div>
+      <div class="quote reveal"><div class="mk">“</div><p>His approach makes the difference when the stakes are high — especially across complex negotiations in Asia.</p><div class="who"><b>Xavier Veyry</b><span>CEO Asia &amp; Europe, AXA XL</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section class="insights" id="insights">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="eyebrow">Latest insights</span><h2>From the negotiation table</h2></div>
+    <div class="posts">
+      <a class="post reveal" href="#"><div class="thumb"></div><div class="body"><div class="date">March 4, 2024</div><h3>Never take “Yes” for an answer</h3><span class="rd">Read article →</span></div></a>
+      <a class="post reveal" href="#"><div class="thumb"></div><div class="body"><div class="date">October 4, 2023</div><h3>Negotiation through the looking glass — TEDx</h3><span class="rd">Read article →</span></div></a>
+      <a class="post reveal" href="#"><div class="thumb"></div><div class="body"><div class="date">September 30, 2023</div><h3>Tigers don't eat salad</h3><span class="rd">Read article →</span></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact on-dark" id="contact">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <span class="eyebrow">Take the first step</span>
+      <h2>Book a free 30-min negotiation audit</h2>
+      <p style="color:rgba(255,255,255,.78);font-size:1.06rem">Tell us about the deal on your desk. We'll show you where value is leaking — and how to take back control.</p>
+      <blockquote class="jfk">Let us never negotiate out of fear. But let us never fear to negotiate.<cite>John F. Kennedy</cite></blockquote>
+      <div class="reassure">We reply within one business day.</div>
+    </div>
+    <form class="reveal" id="auditForm">
+      <div class="row2"><div class="field"><label>Full name</label><input type="text" required></div><div class="field"><label>Email</label><input type="email" required></div></div>
+      <div class="field"><label>Phone (optional)</label><input type="tel"></div>
+      <div class="field"><label>What are you negotiating?</label><textarea></textarea></div>
+      <button type="submit" class="btn btn-primary" style="align-self:flex-start">Send my request</button>
+      <div class="formnote" id="formnote"></div>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="#top"><span class="mk"><svg width="32" height="32"><use href="#nmark"/></svg></span><span class="wm"><span class="t">NEGO</span><b>ASIA</b></span></a>
+        <p>Control your negotiations, or someone else will. Elite negotiation advisory for leaders and commercial teams across Asia.</p>
+      </div>
+      <div class="foot-col"><h4>Explore</h4><a href="#services">Services</a><a href="#expert">The expert</a><a href="#insights">Insights</a><a href="#contact">Contact</a></div>
+      <div class="foot-col"><h4>Get in touch</h4><a href="mailto:info@negoasia.com">info@negoasia.com</a><a href="#">LinkedIn</a><a href="#contact">Book a free audit</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 NegoAsia. All rights reserved.</span><span>Design mockup · variant B</span></div>
+  </div>
+</footer>
+
+<script>
+const hdr=document.getElementById('hdr');
+addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>40));
+document.getElementById('burger').addEventListener('click',()=>{
+  const m=document.querySelector('.menu');const open=m.style.display==='flex';m.style.display=open?'':'flex';
+  if(!open){Object.assign(m.style,{position:'absolute',top:'100%',right:'34px',flexDirection:'column',background:'var(--ivory)',padding:'18px 22px',borderRadius:'2px',gap:'1rem',boxShadow:'0 12px 30px rgba(29,38,54,.14)'});}
+});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+document.getElementById('auditForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('formnote').textContent='✓ Thanks — this is a mockup. In production this connects to email or a CRM.';});
+</script>
+</body>
+</html>

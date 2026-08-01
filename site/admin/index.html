@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>NegoAsia — Content manager</title>
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<style>
+  /* Brand the login screen so it doesn't look like a stray admin panel. */
+  body{margin:0;background:#152238}
+  [class*="AuthenticationPage"]{background:#152238 !important}
+  [class*="AuthenticationPage"] button{background:#C2A063 !important;color:#152238 !important;
+    font-weight:700 !important;border-radius:2px !important}
+</style>
+</head>
+<body>
+<script src="https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js"></script>
+<script>
+  // Show the site's own preview styles inside the editor preview pane.
+  if (window.CMS) { CMS.registerPreviewStyle('/assets/css/site.css'); }
+</script>
+</body>
+</html>

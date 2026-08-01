@@ -1,0 +1,32 @@
+# NegoAsia — Netlify redirects
+# ---------------------------------------------------------------------------
+# The four article URLs from the WordPress site are NOT redirected: they are
+# served at the exact same paths by the new site, so their SEO is preserved
+# with zero loss. Only the legacy WordPress archive/taxonomy URLs are mapped.
+# ---------------------------------------------------------------------------
+
+# Legacy WordPress archives and taxonomies -> the new Insights index
+/news/                 /blog/     301
+/news                  /blog/     301
+/uncategorized/        /blog/     301
+/uncategorized         /blog/     301
+/category/             /blog/     301
+/category              /blog/     301
+/negotiation/          /blog/     301
+/negotiation           /blog/     301
+
+# WordPress plumbing that may still be linked or crawled
+/wp-admin/*            /          301
+/wp-login.php          /          301
+/feed/                 /blog/     301
+/comments/feed/        /blog/     301
+/?feed=*               /blog/     301
+
+# Safety net for the .html paths used during the build phase
+/about.html            /about/     301
+/services.html         /services/  301
+/contact.html          /contact/   301
+/blog.html             /blog/      301
+/terms.html            /terms/     301
+/privacy.html          /privacy/   301
+/thanks.html           /thanks/    301
