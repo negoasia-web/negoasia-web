@@ -18,6 +18,7 @@ migrated articles are byte-identical to the hand-built versions.
     python3 build.py --check    # build into memory and report differences only
 """
 
+import json
 import pathlib
 import re
 import sys
@@ -81,6 +82,12 @@ def parse_front_matter(text):
 # ------------------------------------------------------------------- markdown
 
 INLINE = [
+    # Images first: ![alt](src) would otherwise be eaten by the link rule and
+    # left as a stray "!" in front of an anchor. Decap's editor emits this form,
+    # so any image Nicolas drops into an article body arrives here.
+    (re.compile(r"!\[([^\]]*)\]\(([^)\s]+)\)"),
+     r'<img src="\2" alt="\1" loading="lazy" '
+     r'style="border:1px solid var(--line);border-radius:2px;margin:2rem 0;width:100%">'),
     (re.compile(r"\*\*(.+?)\*\*"), r"<strong>\1</strong>"),
     (re.compile(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])"), r"<em>\1</em>"),
     (re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)"), r'<a href="\2">\1</a>'),
@@ -281,6 +288,63 @@ def sync_sitemap(arts):
     p.write_text(t, encoding="utf-8")
 
 
+# ---------------------------------------------------------------- page SEO
+
+PAGES = [
+    ("home",     "index.html"),
+    ("about",    "about/index.html"),
+    ("services", "services/index.html"),
+    ("blog",     "blog/index.html"),
+    ("contact",  "contact/index.html"),
+    ("ai",       "ai/index.html"),
+    ("terms",    "terms/index.html"),
+    ("privacy",  "privacy/index.html"),
+]
+
+PAGE_META = ROOT / "content" / "pages"
+BASE_URL = "https://www.negoasia.com"
+
+
+def apply_page_seo(check=False):
+    """The seven hand-written pages are not generated from templates, so their
+    metadata is patched in place from content/pages/*.json. That is what makes
+    titles, descriptions and share images editable from the CMS without turning
+    every page into a template."""
+    changed = []
+    for name, rel in PAGES:
+        src = PAGE_META / (name + ".json")
+        dst = SITE / rel
+        if not src.exists() or not dst.exists():
+            continue
+        d = json.loads(src.read_text(encoding="utf-8"))
+        html = dst.read_text(encoding="utf-8")
+        out = html
+
+        img = (d.get("image") or "").strip()
+        if img and not img.startswith("http"):
+            img = BASE_URL + img
+
+        subs = [
+            (r"(<title>).*?(</title>)", d.get("title")),
+            (r'(<meta name="description" content=").*?(">)', d.get("description")),
+            (r'(<meta property="og:title" content=").*?(">)',
+             d.get("og_title") or d.get("title")),
+            (r'(<meta property="og:description" content=").*?(">)',
+             d.get("og_description") or d.get("description")),
+            (r'(<meta property="og:image" content=").*?(">)', img),
+        ]
+        for pat, val in subs:
+            if val:
+                out = re.sub(pat, lambda m, v=val: m.group(1) + v + m.group(2),
+                             out, count=1, flags=re.S)
+
+        if out != html:
+            changed.append(rel)
+            if not check:
+                dst.write_text(out, encoding="utf-8")
+    return changed
+
+
 def main():
     check = "--check" in sys.argv
     arts = load_articles()
@@ -301,6 +365,8 @@ def main():
             if not check:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(out, encoding="utf-8")
+
+    changed += apply_page_seo(check=check)
 
     if not check:
         sync_sitemap(arts)

@@ -13,6 +13,7 @@ Message-a-Nicolas.md
 # ── Local working files ─────────────────────────────────────────────────────
 _to_delete/
 _new/
+_tmp/
 shots/
 __pycache__/
 *.pyc

@@ -222,7 +222,7 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 .foot-brand .brand{margin-bottom:1.2rem}
 .foot-brand .brand .wm{color:#fff}
 .foot-brand p{max-width:38ch;font-size:.94rem}
-.foot-col h4{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);margin-bottom:1.1rem;font-weight:700}
+.foot-col .foot-h{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2);margin-bottom:1.1rem;font-weight:700}
 .foot-col a{display:block;font-size:.92rem;margin-bottom:.6rem;transition:color .2s}
 .foot-col a:hover{color:#fff}
 .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:26px;font-size:.84rem;flex-wrap:wrap;gap:12px}
@@ -284,7 +284,7 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 .legal{background:var(--ivory-2)}
 .legal-grid{display:grid;grid-template-columns:250px 1fr;gap:72px;align-items:start}
 .toc{position:sticky;top:110px}
-.toc h4{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;font-weight:700}
+.toc .toc-h{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;font-weight:700}
 .toc ol{list-style:none;counter-reset:toc}
 .toc li{counter-increment:toc;border-top:1px solid var(--line)}
 .toc li:last-child{border-bottom:1px solid var(--line)}
@@ -392,7 +392,7 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 .author .photo .plabel{padding:0}
 .author .photo .plabel b{font-size:.58rem}
 .author .photo .plabel span{display:none}
-.author h4{font-family:"Archivo",sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:.2rem}
+.author .author-name{font-family:"Archivo",sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:.2rem}
 .author p{color:var(--muted);font-size:.94rem}
 
 /* Notice band (internal reminders, PDPA drafting note) */
@@ -487,3 +487,20 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
   .cc-actions{width:100%}
   .cc-actions .btn{flex:1;text-align:center}
 }
+
+/* ============================================================
+   Language switcher. Text codes rather than flags: a flag is a
+   country, not a language — French is also Belgian, Swiss and
+   Canadian, and Nicolas's audience is deliberately international.
+   FR is rendered but inert until /fr/ exists (phase 2).
+   ============================================================ */
+.lang{display:flex;align-items:center;gap:.55rem;font-family:"Archivo",sans-serif;
+      font-size:.74rem;font-weight:700;letter-spacing:.14em;flex:none}
+.lang .sep{color:var(--line);font-weight:400}
+.lang a,.lang span[data-lang]{color:var(--muted);transition:color .2s;padding:.2em 0}
+.lang a:hover{color:var(--gold)}
+.lang [aria-current="true"]{color:var(--ink);position:relative}
+.lang [aria-current="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-4px;
+      height:1px;background:var(--gold)}
+.lang .soon{color:var(--muted);opacity:.45;cursor:default}
+@media (max-width:960px){ .lang{margin-left:auto;margin-right:.4rem} }

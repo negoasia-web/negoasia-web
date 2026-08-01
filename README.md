@@ -14,6 +14,7 @@ site/                     what gets published (Netlify publish directory)
   assets/css|js|fonts|img
   _redirects robots.txt sitemap.xml 404.html llms.txt
 content/articles/*.md     article source — this is what the CMS edits
+content/pages/*.json      SEO metadata for the eight fixed pages — also CMS-edited
 templates/                page shells used by build.py
 build.py                  content/ + templates/ -> site/
 verify.py                 screenshots, link check, console-error check
@@ -65,10 +66,19 @@ is no request to Google Fonts, which is both faster and simpler under the PDPA.
 
 - [ ] `site/robots.txt` — currently `Disallow: /`. Open the site up.
 - [ ] `site/assets/js/site.js` — set `GA4_ID` to the real measurement ID.
-- [ ] `site/admin/config.yml` — set `repo`.
 - [ ] Fill the last 6 highlighted placeholders in `/terms/` and `/privacy/` — registered
       entity name, registration number, registered address. Everything else is already
       set to market-standard terms. Then delete the two `.notice` boxes and the `.todo`
       CSS rule at the end of `site.css`.
 - [ ] Have a Thai lawyer review `/terms/` and `/privacy/` before go-live.
+- [ ] Get Nicolas's explicit sign-off on the **commercial** terms — they are business
+      decisions, not legal ones, and they are published in his name: the 50/50 payment
+      split, 15-day invoice terms, the 15 / 6–14 / ≤5 business-day cancellation scale,
+      the one free reschedule per engagement, and five-year confidentiality.
+- [ ] `/terms/` §5 cites the Thai statutory default interest rate as "currently 5%".
+      The base rate under CCC s.7 can be revised by royal decree roughly every three
+      years — re-check it whenever the page is next touched.
 - [ ] Copy the current DNS records (**especially MX**) before repointing.
+
+`robots.txt` should be the **last** switch flipped, not the first: it is the only thing
+currently keeping the "Pending confirmation" legal drafts out of Google.

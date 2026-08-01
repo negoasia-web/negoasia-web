@@ -1,13 +1,15 @@
 # Decap CMS — NegoAsia
 #
-# Repo set to negoasia-web/negoasia-web (GitHub org) on 2026-08-01.
+# Repo set to negoasia-web/negoasia-web on 2026-08-01. That owner is a personal
+# GitHub account, not an organisation.
 #
 # Remaining setup, done once in Netlify:
 #   Site configuration → Access & security → OAuth → Install provider → GitHub
 # That is what lets Nicolas log in at /admin/ with his GitHub account.
 #
-# The repo is private, so anyone who edits content must be a collaborator on it.
-# Add Nicolas under Settings → Collaborators on GitHub when he is ready to publish.
+# The repo is PUBLIC: anyone can read it, so nothing secret may ever be committed
+# here. Writing is what needs permission — add Nicolas under Settings →
+# Collaborators on GitHub when he is ready to publish.
 
 backend:
   name: github
@@ -114,8 +116,132 @@ collections:
                   bulleted-list, numbered-list]
         editor_components: []
 
+  - name: page-seo
+    label: Page SEO
+    label_singular: Page
+    description: >
+      How each page appears in Google, and when it is shared on LinkedIn or
+      WhatsApp. This changes the metadata only — the visible text of these pages
+      lives in the code and is not editable here.
+    editor:
+      preview: false
+    files:
+      - name: home
+        label: "Home  (/)"
+        file: content/pages/home.json
+        fields:
+          - { label: "Page title", name: title, widget: string,
+              hint: "The blue line in Google results and the browser tab. Under 60 characters." }
+          - { label: "Search description", name: description, widget: text,
+              hint: "The grey summary under the title in Google, and what AI assistants quote. 140-160 characters, a full sentence. Not shown on the page." }
+          - { label: "Share title", name: og_title, widget: string, required: false,
+              hint: "Used when the page is shared on LinkedIn or WhatsApp. Leave empty to reuse the page title." }
+          - { label: "Share description", name: og_description, widget: text, required: false,
+              hint: "Leave empty to reuse the search description." }
+          - { label: "Share image", name: image, widget: image, required: false,
+              hint: "Shown when the page is shared. 1200 x 630. Leave empty for the NegoAsia default." }
+      - name: about
+        label: "About  (/about/)"
+        file: content/pages/about.json
+        fields:
+          - { label: "Page title", name: title, widget: string,
+              hint: "The blue line in Google results and the browser tab. Under 60 characters." }
+          - { label: "Search description", name: description, widget: text,
+              hint: "The grey summary under the title in Google, and what AI assistants quote. 140-160 characters, a full sentence. Not shown on the page." }
+          - { label: "Share title", name: og_title, widget: string, required: false,
+              hint: "Used when the page is shared on LinkedIn or WhatsApp. Leave empty to reuse the page title." }
+          - { label: "Share description", name: og_description, widget: text, required: false,
+              hint: "Leave empty to reuse the search description." }
+          - { label: "Share image", name: image, widget: image, required: false,
+              hint: "Shown when the page is shared. 1200 x 630. Leave empty for the NegoAsia default." }
+      - name: services
+        label: "Services  (/services/)"
+        file: content/pages/services.json
+        fields:
+          - { label: "Page title", name: title, widget: string,
+              hint: "The blue line in Google results and the browser tab. Under 60 characters." }
+          - { label: "Search description", name: description, widget: text,
+              hint: "The grey summary under the title in Google, and what AI assistants quote. 140-160 characters, a full sentence. Not shown on the page." }
+          - { label: "Share title", name: og_title, widget: string, required: false,
+              hint: "Used when the page is shared on LinkedIn or WhatsApp. Leave empty to reuse the page title." }
+          - { label: "Share description", name: og_description, widget: text, required: false,
+              hint: "Leave empty to reuse the search description." }
+          - { label: "Share image", name: image, widget: image, required: false,
+              hint: "Shown when the page is shared. 1200 x 630. Leave empty for the NegoAsia default." }
+      - name: blog
+        label: "Insights index  (/blog/)"
+        file: content/pages/blog.json
+        fields:
+          - { label: "Page title", name: title, widget: string,
+              hint: "The blue line in Google results and the browser tab. Under 60 characters." }
+          - { label: "Search description", name: description, widget: text,
+              hint: "The grey summary under the title in Google, and what AI assistants quote. 140-160 characters, a full sentence. Not shown on the page." }
+          - { label: "Share title", name: og_title, widget: string, required: false,
+              hint: "Used when the page is shared on LinkedIn or WhatsApp. Leave empty to reuse the page title." }
+          - { label: "Share description", name: og_description, widget: text, required: false,
+              hint: "Leave empty to reuse the search description." }
+          - { label: "Share image", name: image, widget: image, required: false,
+              hint: "Shown when the page is shared. 1200 x 630. Leave empty for the NegoAsia default." }
+      - name: contact
+        label: "Contact  (/contact/)"
+        file: content/pages/contact.json
+        fields:
+          - { label: "Page title", name: title, widget: string,
+              hint: "The blue line in Google results and the browser tab. Under 60 characters." }
+          - { label: "Search description", name: description, widget: text,
+              hint: "The grey summary under the title in Google, and what AI assistants quote. 140-160 characters, a full sentence. Not shown on the page." }
+          - { label: "Share title", name: og_title, widget: string, required: false,
+              hint: "Used when the page is shared on LinkedIn or WhatsApp. Leave empty to reuse the page title." }
+          - { label: "Share description", name: og_description, widget: text, required: false,
+              hint: "Leave empty to reuse the search description." }
+          - { label: "Share image", name: image, widget: image, required: false,
+              hint: "Shown when the page is shared. 1200 x 630. Leave empty for the NegoAsia default." }
+      - name: ai
+        label: "NegoAsia in brief  (/ai/)"
+        file: content/pages/ai.json
+        fields:
+          - { label: "Page title", name: title, widget: string,
+              hint: "The blue line in Google results and the browser tab. Under 60 characters." }
+          - { label: "Search description", name: description, widget: text,
+              hint: "The grey summary under the title in Google, and what AI assistants quote. 140-160 characters, a full sentence. Not shown on the page." }
+          - { label: "Share title", name: og_title, widget: string, required: false,
+              hint: "Used when the page is shared on LinkedIn or WhatsApp. Leave empty to reuse the page title." }
+          - { label: "Share description", name: og_description, widget: text, required: false,
+              hint: "Leave empty to reuse the search description." }
+          - { label: "Share image", name: image, widget: image, required: false,
+              hint: "Shown when the page is shared. 1200 x 630. Leave empty for the NegoAsia default." }
+      - name: terms
+        label: "Terms & Conditions  (/terms/)"
+        file: content/pages/terms.json
+        fields:
+          - { label: "Page title", name: title, widget: string,
+              hint: "The blue line in Google results and the browser tab. Under 60 characters." }
+          - { label: "Search description", name: description, widget: text,
+              hint: "The grey summary under the title in Google, and what AI assistants quote. 140-160 characters, a full sentence. Not shown on the page." }
+          - { label: "Share title", name: og_title, widget: string, required: false,
+              hint: "Used when the page is shared on LinkedIn or WhatsApp. Leave empty to reuse the page title." }
+          - { label: "Share description", name: og_description, widget: text, required: false,
+              hint: "Leave empty to reuse the search description." }
+          - { label: "Share image", name: image, widget: image, required: false,
+              hint: "Shown when the page is shared. 1200 x 630. Leave empty for the NegoAsia default." }
+      - name: privacy
+        label: "Privacy Policy  (/privacy/)"
+        file: content/pages/privacy.json
+        fields:
+          - { label: "Page title", name: title, widget: string,
+              hint: "The blue line in Google results and the browser tab. Under 60 characters." }
+          - { label: "Search description", name: description, widget: text,
+              hint: "The grey summary under the title in Google, and what AI assistants quote. 140-160 characters, a full sentence. Not shown on the page." }
+          - { label: "Share title", name: og_title, widget: string, required: false,
+              hint: "Used when the page is shared on LinkedIn or WhatsApp. Leave empty to reuse the page title." }
+          - { label: "Share description", name: og_description, widget: text, required: false,
+              hint: "Leave empty to reuse the search description." }
+          - { label: "Share image", name: image, widget: image, required: false,
+              hint: "Shown when the page is shared. 1200 x 630. Leave empty for the NegoAsia default." }
+
 # ── Note for later ──────────────────────────────────────────────────────────
-# A second collection can be added so Nicolas edits the Home / About / Services
-# copy himself. That requires turning those pages into templates + content files
-# the same way articles work. Deliberately left out of this first pass: articles
-# are what he will actually publish week to week.
+# "Page SEO" above covers the metadata of the fixed pages. Making their *visible
+# text* editable is a further step: each page would become a template plus a
+# content file, the way articles already work. Deliberately deferred — those
+# pages still carry photo placeholders, unconfirmed figures and six missing
+# legal fields, so modelling them now would mean doing it twice.
