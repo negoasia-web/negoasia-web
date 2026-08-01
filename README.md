@@ -66,5 +66,9 @@ is no request to Google Fonts, which is both faster and simpler under the PDPA.
 - [ ] `site/robots.txt` — currently `Disallow: /`. Open the site up.
 - [ ] `site/assets/js/site.js` — set `GA4_ID` to the real measurement ID.
 - [ ] `site/admin/config.yml` — set `repo`.
-- [ ] Fill every highlighted placeholder in `/terms/` and `/privacy/`.
+- [ ] Fill the last 6 highlighted placeholders in `/terms/` and `/privacy/` — registered
+      entity name, registration number, registered address. Everything else is already
+      set to market-standard terms. Then delete the two `.notice` boxes and the `.todo`
+      CSS rule at the end of `site.css`.
+- [ ] Have a Thai lawyer review `/terms/` and `/privacy/` before go-live.
 - [ ] Copy the current DNS records (**especially MX**) before repointing.
