@@ -1,12 +1,12 @@
 ---
-title: 10 rules to maximize your negotiations
-date: 2023-09-30
-tag: Method
-description: Ten practical rules to maximize your negotiations, why they work, and a one-page reference sheet: from negotiating as if your life did not depend on it to creating a state of flow.
-standfirst: Ten practical rules, why they work, and a one-page reference sheet to take with you.
-image: ''
-image_caption: 10 rules to maximize your negotiations — original featured image
-image_source: https://www.negoasia.com/wp-content/uploads/2023/09/Rectangle-21-1.webp
+title: "10 rules to maximize your negotiations"
+date: "2023-09-30"
+tag: "Method"
+standfirst: "Ten practical rules, why they work, and a one-page reference sheet to take with you."
+description: "Ten practical rules to maximize your negotiations, why they work, and a one-page reference sheet: from negotiating as if your life did not depend on it to creating a state of flow."
+image: ""
+image_caption: "10 rules to maximize your negotiations — original featured image"
+image_source: "https://www.negoasia.com/wp-content/uploads/2023/09/Rectangle-21-1.webp"
 ---
 
 <p class="lede">By the time you finish reading this article:</p>

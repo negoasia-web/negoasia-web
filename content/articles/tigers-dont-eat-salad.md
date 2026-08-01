@@ -1,12 +1,12 @@
 ---
-title: Tigers don’t eat salad!
-date: 2023-09-30
-tag: Asia
-description: Three negotiation tips for the real world: the hidden currencies of concession, why win-win can become lose-lose, and why value hides in differences rather than in common ground.
-standfirst: Three negotiation tips for the real world.
-image: ''
-image_caption: Tigers don't eat salad — original featured image
-image_source: https://www.negoasia.com/wp-content/uploads/2023/09/Rectangle-22-1.webp
+title: "Tigers don’t eat salad!"
+date: "2023-09-30"
+tag: "Asia"
+standfirst: "Three negotiation tips for the real world."
+description: "Three negotiation tips for the real world: the hidden currencies of concession, why win-win can become lose-lose, and why value hides in differences rather than in common ground."
+image: ""
+image_caption: "Tigers don't eat salad — original featured image"
+image_source: "https://www.negoasia.com/wp-content/uploads/2023/09/Rectangle-22-1.webp"
 ---
 
 <h2>1. Tigers don't eat salad</h2>

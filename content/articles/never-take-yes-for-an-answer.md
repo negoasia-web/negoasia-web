@@ -1,12 +1,12 @@
 ---
-title: Never take “Yes” for an answer!
-date: 2024-03-04
-tag: Method
-description: Navigate the negotiation fog to get what you want: ten elements of complexity, from when a negotiation really begins to the flight plan for foggy conditions.
-standfirst: Instead, navigate the negotiation fog to get what you want.
-image: ''
-image_caption: Robert S. McNamara, 1967 — original featured image
-image_source: https://www.negoasia.com/wp-content/uploads/2024/03/Robert-S-McNamara-1967.webp
+title: "Never take “Yes” for an answer!"
+date: "2024-03-04"
+tag: "Method"
+standfirst: "Instead, navigate the negotiation fog to get what you want."
+description: "Navigate the negotiation fog to get what you want: ten elements of complexity, from when a negotiation really begins to the flight plan for foggy conditions."
+image: ""
+image_caption: "Robert S. McNamara, 1967 — original featured image"
+image_source: "https://www.negoasia.com/wp-content/uploads/2024/03/Robert-S-McNamara-1967.webp"
 ---
 
 <p class="lede">Robert McNamara, Secretary of Defense under President John Fitzgerald Kennedy, coined the phrase &ldquo;The Fog of War&rdquo; to describe the incredible complexity of armed conflict.</p>

@@ -36,6 +36,20 @@ def esc(s):
              .replace(">", "&gt;").replace('"', "&quot;"))
 
 
+def unquote(v):
+    """Front matter values are written as JSON strings (valid double-quoted YAML)
+    so that a colon inside a description cannot break the document. Decap writes
+    them the same way. Fall back to the raw value for hand-edited files."""
+    v = v.strip()
+    if len(v) >= 2 and v[0] == v[-1] and v[0] in "\"'":
+        try:
+            import json
+            return json.loads(v) if v[0] == '"' else v[1:-1]
+        except ValueError:
+            return v[1:-1]
+    return v
+
+
 def parse_front_matter(text):
     """Minimal YAML front matter: `key: value` plus `key: |` block scalars."""
     if not text.startswith("---"):
@@ -57,7 +71,7 @@ def parse_front_matter(text):
         if v == "|":
             key, block = k, []
         else:
-            meta[k] = v
+            meta[k] = unquote(v)
 
     if key is not None:
         meta[key] = "\n".join(block).rstrip()

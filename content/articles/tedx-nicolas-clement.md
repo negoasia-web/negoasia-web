@@ -1,11 +1,11 @@
 ---
-title: TEDx: Negotiation through the Looking Glass
-date: 2023-10-04
-tag: Talks
-description: Nicolas Clement on the TEDx stage: why the negotiator who wins consistently is the one who has spent the most time on the other side of the table.
-standfirst: Nicolas Clement on the TEDx stage — why you cannot negotiate well from your own side of the table alone.
-youtube: J4lO3qP3tN0?start=667
-youtube_title: TEDx — Negotiation through the looking glass, Nicolas Clement
+title: "TEDx: Negotiation through the Looking Glass"
+date: "2023-10-04"
+tag: "Talks"
+standfirst: "Nicolas Clement on the TEDx stage — why you cannot negotiate well from your own side of the table alone."
+description: "Nicolas Clement on the TEDx stage: why the negotiator who wins consistently is the one who has spent the most time on the other side of the table."
+youtube: "J4lO3qP3tN0?start=667"
+youtube_title: "TEDx — Negotiation through the looking glass, Nicolas Clement"
 ---
 
 <p class="lede">Almost everything written about negotiation is written from one chair: yours. Your objectives, your arguments, your limits, your tactics. It is a natural place to start and a poor place to stop.</p>
