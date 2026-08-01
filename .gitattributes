@@ -1,0 +1,16 @@
+# Normalise line endings so that files arriving from the cloud workspace (LF)
+# and files touched on Windows/OneDrive (CRLF) stop showing up as modified when
+# nothing has actually changed. Without this, `git status` lists a dozen phantom
+# edits after every delivery and real changes get lost in the noise.
+* text=auto eol=lf
+
+# Binary — never normalise, never diff as text.
+*.png   binary
+*.webp  binary
+*.jpg   binary
+*.jpeg  binary
+*.svg   text eol=lf
+*.woff2 binary
+*.pdf   binary
+*.docx  binary
+*.zip   binary

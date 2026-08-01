@@ -65,8 +65,9 @@ Les pages Home, About, Services, Contact, Terms, Privacy, `/ai/` et 404 sont du 
 7. **`verify.py` ne doit jamais écrire dans `site/`.** Il générait autrefois l'image
    Open Graph et l'écrasait silencieusement à chaque exécution ; ce travail est passé
    dans `make_og.py`. Un script de vérification qui modifie ce qu'il vérifie ment.
-8. **Sur Windows** : `git config core.fileMode false` est déjà posé, sinon OneDrive fait
-   apparaître tous les fichiers comme modifiés.
+8. **Sur Windows** : `git config core.fileMode false` est déjà posé, et un `.gitattributes`
+   force `eol=lf`. Sans ces deux réglages, OneDrive et les fins de ligne font apparaître une
+   dizaine de fichiers « modifiés » à chaque livraison, et les vrais changements s'y noient.
 
 ## Design system
 
