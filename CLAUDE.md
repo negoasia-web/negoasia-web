@@ -88,6 +88,28 @@ suivre le lien — l'interception se fait en phase de capture. Le bouton est dé
 de `--cc-h`, la hauteur de la bannière cookies publiée par `site.js` : sans ce
 décalage il se posait pile sur le bouton « Accept », or sur or, donc invisible.
 
+## Formulaires Netlify — le piège qui ne fait pas de bruit
+
+La détection de formulaires se fait **au build**, dans l'étape de post-traitement.
+Tant qu'elle est désactivée, le log affiche `Skipping form detection` et **aucun
+formulaire n'est enregistré** : les envois partent en 404 côté serveur, mais le
+`fetch()` du widget ne le voit pas et affiche quand même « Got it — thank you ».
+C'est resté ainsi jusqu'au 02/08 — pour le widget *et* pour le formulaire de
+contact, la seule capture de prospect du site.
+
+Deux conséquences pratiques :
+
+- **Activer la détection ne suffit pas. Il faut redéployer.** Le réglage
+  n'agit qu'au build suivant.
+- **Après toute intervention sur l'hébergement, relire le log de déploiement** et
+  vérifier la présence de `Post processing - Forms` suivi de `Processing form - audit`
+  et `Processing form - review`. C'est la seule preuve que la chaîne tient.
+
+Une notification email est en place sur l'adresse de service du projet, sur **tout**
+formulaire — donc les retours de Nicolas comme les demandes d'audit. L'adresse exacte
+est dans `NegoAsia-Projet.md` : ce dépôt est public, et une adresse écrite en clair
+dans un fichier indexé par GitHub finit chez les moissonneurs.
+
 ## Cache
 
 Les noms de fichiers ne sont **pas** hachés. Le `netlify.toml` en tient compte : polices
