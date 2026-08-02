@@ -312,9 +312,13 @@
       /* Safari mobile émule un mouseover au tap : sans ce garde-fou, un liseré
          et une pastille apparaissent au hasard sous le doigt. */
       if (TOUCH || open) return;
-      if (e.target.closest('.rv-panel, .rv-btn, .rv-mark, header, footer, .cc')) return;
+      /* La pastille et le panneau font partie du geste : y entrer ne doit pas
+         éteindre le liseré. L'en-tête, le pied et la bannière, si. */
+      if (e.target.closest('.rv-panel, .rv-btn, .rv-mark')) return;
+      if (e.target.closest('header, footer, .cc')) { clearHover(); return; }
       var el = e.target.closest(SEL);
-      if (!el || el === hover) return;
+      if (!el) { clearHover(); return; }
+      if (el === hover) return;
       if (hover) hover.classList.remove('rv-hi');
       hover = el;
       el.classList.add('rv-hi');
