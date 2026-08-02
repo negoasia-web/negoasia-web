@@ -172,6 +172,249 @@
     }
   }
 
+
+
+  /* ===============================================================
+     REVIEW WIDGET — preview only
+     Nicolas reads the site on his phone and sends remarks by
+     WhatsApp. The one thing those messages always lack is *which
+     page*, which turns every remark into a guessing game. This
+     button lives on the page itself, so the URL is captured for
+     free. It renders only on the Netlify preview domain and can
+     therefore never appear on negoasia.com.
+     Its form is declared statically in /forms.html — Netlify needs
+     to see it at build time to accept the submissions.
+     =============================================================== */
+  (function reviewWidget() {
+    if (!/\.netlify\.app$/.test(location.hostname)) return;
+    if (location.pathname.indexOf('/admin') === 0) return;
+
+    /* Élements sur lesquels Nicolas peut pointer. On vise le bloc de sens le
+       plus fin — un paragraphe, un titre, une puce, une carte — pour qu'il
+       n'ait plus à décrire où il regarde. */
+    var SEL = 'main h1, main h2, main h3, main p, main li, main blockquote,' +
+              'main .stat, main .svc, main .card, main .quote, main .step,' +
+              'main .it, main .post, main .photo, main img, main dd, main summary';
+
+    var open = false, panel = null, target = null, hover = null;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'rv-btn';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" ' +
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
+      'A remark';
+    btn.addEventListener('click', function () { openPanel(null); });
+    document.body.appendChild(btn);
+
+    /* Pastille flottante, une seule, repositionnée au survol. */
+    var mark = document.createElement('button');
+    mark.type = 'button';
+    mark.className = 'rv-mark';
+    mark.title = 'A remark on this element';
+    mark.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" ' +
+      'stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 ' +
+      '2-2h14a2 2 0 0 1 2 2z"/></svg>';
+    mark.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openPanel(hover);
+    });
+    document.body.appendChild(mark);
+
+    function clearHover() {
+      if (hover) hover.classList.remove('rv-hi');
+      hover = null;
+      mark.classList.remove('in');
+    }
+
+    document.addEventListener('mouseover', function (e) {
+      if (open) return;
+      if (e.target.closest('.rv-panel, .rv-btn, .rv-mark, header, footer, .cc')) return;
+      var el = e.target.closest(SEL);
+      if (!el || el === hover) return;
+      if (hover) hover.classList.remove('rv-hi');
+      hover = el;
+      el.classList.add('rv-hi');
+      var r = el.getBoundingClientRect();
+      mark.style.top = (r.top + scrollY - 9) + 'px';
+      mark.style.left = (r.left + scrollX - 34) + 'px';
+      mark.classList.add('in');
+    });
+    addEventListener('scroll', function () { if (!open) clearHover(); }, { passive: true });
+
+    /* Chemin CSS court, pour retrouver l'élément exact plus tard. */
+    function path(el) {
+      var out = [];
+      while (el && el.tagName && el.tagName.toLowerCase() !== 'main' && out.length < 5) {
+        var s = el.tagName.toLowerCase();
+        if (el.id) { out.unshift('#' + el.id); break; }
+        var p = el.parentElement;
+        if (p) {
+          var same = Array.prototype.filter.call(p.children, function (c) { return c.tagName === el.tagName; });
+          if (same.length > 1) s += ':nth-of-type(' + (same.indexOf(el) + 1) + ')';
+        }
+        out.unshift(s);
+        el = el.parentElement;
+      }
+      return out.join(' > ');
+    }
+
+    /* Section porteuse : son surtitre ou son titre. À défaut, le nom de sa
+       classe — « stats », « trust » — ce qui reste plus parlant qu'un <div>. */
+    function sectionOf(el) {
+      var sec = el.closest('section, article, header');
+      if (!sec) return '';
+      var h = sec.querySelector('h1, h2, h3');
+      var eyebrow = sec.querySelector('.eyebrow');
+      var named = [eyebrow && eyebrow.textContent.trim(), h && h.textContent.trim()]
+        .filter(Boolean).join(' — ');
+      if (named) return named;
+      var cls = (sec.className || '').split(/\s+/).filter(function (c) {
+        return c && c !== 'on-dark' && c !== 'reveal' && c !== 'wrap';
+      })[0];
+      return cls ? cls.charAt(0).toUpperCase() + cls.slice(1) : '';
+    }
+
+    /* Nom humain de l'élément : « Key figure » plutôt que « div ». */
+    var LABELS = [
+      ['.stat', 'Key figure'], ['.svc', 'Service block'], ['.card', 'Card'],
+      ['.quote', 'Testimonial'], ['.step', 'Step'], ['.it', 'Credential strip item'],
+      ['.post', 'Article card'], ['.photo', 'Photo slot'], ['.featured', 'Featured article'],
+      ['.qlist li', 'Numbered question'], ['.awards li', 'Credential'],
+      ['.logos span', 'Client logo'], ['.flist li', 'Bullet']
+    ];
+    var TAGS = { H1: 'Main heading', H2: 'Heading', H3: 'Sub-heading', P: 'Paragraph',
+                 LI: 'List item', BLOCKQUOTE: 'Pull quote', IMG: 'Image',
+                 DD: 'Detail line', SUMMARY: 'FAQ question' };
+
+    function labelOf(el) {
+      for (var i = 0; i < LABELS.length; i++) {
+        if (el.matches(LABELS[i][0])) return LABELS[i][1];
+      }
+      return TAGS[el.tagName] || el.tagName.toLowerCase();
+    }
+
+    function describe(el) {
+      if (!el) return { where: '', selector: '', excerpt: '', label: 'The page as a whole' };
+      var txt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (!txt && el.tagName === 'IMG') txt = '[image] ' + (el.getAttribute('alt') || '');
+      if (!txt && el.classList.contains('photo')) txt = '[photo placeholder]';
+      var excerpt = txt.length > 140 ? txt.slice(0, 140) + '…' : txt;
+      var sec = sectionOf(el);
+      return {
+        where: (sec ? sec + ' › ' : '') + labelOf(el),
+        selector: path(el),
+        excerpt: excerpt,
+        label: excerpt || el.tagName.toLowerCase()
+      };
+    }
+
+    function build() {
+      panel = document.createElement('div');
+      panel.className = 'rv-panel';
+      panel.setAttribute('role', 'dialog');
+      panel.setAttribute('aria-label', 'Send a remark');
+      panel.innerHTML =
+        '<h3 id="rv-title">A remark on this element</h3>' +
+        '<p class="sub">Say what does not match how you see it. The page and the exact spot ' +
+        'travel with your message, so there is nothing to describe.</p>' +
+        '<div class="ctx" id="rv-ctx"></div>' +
+        '<label for="rv-msg">What would you change?</label>' +
+        '<textarea id="rv-msg" placeholder="What bothers you, and what you would put instead."></textarea>' +
+        '<label for="rv-who">From (optional)</label>' +
+        '<input type="text" id="rv-who" placeholder="Nicolas">' +
+        '<div class="rv-actions">' +
+          '<button type="button" class="btn btn-primary" id="rv-send">Send</button>' +
+          '<button type="button" class="rv-close" id="rv-cancel">Cancel</button>' +
+        '</div>' +
+        '<div class="rv-note" id="rv-note"></div>';
+      document.body.appendChild(panel);
+      panel.querySelector('#rv-cancel').addEventListener('click', close);
+      panel.querySelector('#rv-send').addEventListener('click', send);
+      try {
+        var who = localStorage.getItem('negoasia-reviewer');
+        if (who) panel.querySelector('#rv-who').value = who;
+      } catch (e) {}
+      addEventListener('keydown', function (e) { if (e.key === 'Escape' && open) close(); });
+    }
+
+    function openPanel(el) {
+      if (!panel) build();
+      target = el;
+      var d = describe(el);
+      panel.querySelector('#rv-title').textContent =
+        el ? 'A remark on this element' : 'A remark on this page';
+      panel.querySelector('#rv-ctx').innerHTML =
+        location.pathname + (d.where ? '<b>' + d.where.replace(/</g, '&lt;') + '</b>' : '') +
+        (d.excerpt ? '<b>“' + d.excerpt.replace(/</g, '&lt;') + '”</b>' : '');
+      panel.classList.add('in');
+      btn.style.display = 'none';
+      mark.classList.remove('in');
+      if (hover) hover.classList.remove('rv-hi');
+      open = true;
+      btn.setAttribute('aria-expanded', 'true');
+      panel.querySelector('#rv-msg').focus();
+    }
+
+    function close() {
+      if (!panel) return;
+      panel.classList.remove('in');
+      btn.style.display = '';
+      btn.setAttribute('aria-expanded', 'false');
+      open = false;
+      target = null;
+      clearHover();
+    }
+
+    function send() {
+      var msg = panel.querySelector('#rv-msg').value.trim();
+      var note = panel.querySelector('#rv-note');
+      if (!msg) {
+        note.className = 'rv-note err';
+        note.textContent = 'Write a line first — even a short one.';
+        return;
+      }
+      var who = panel.querySelector('#rv-who').value.trim();
+      try { if (who) localStorage.setItem('negoasia-reviewer', who); } catch (e) {}
+
+      var d = describe(target);
+      var data = {
+        'form-name': 'review',
+        page: location.href,
+        where: d.where,
+        selector: d.selector,
+        excerpt: d.excerpt,
+        message: msg,
+        author: who || 'unknown',
+        viewport: innerWidth + 'x' + innerHeight,
+        useragent: navigator.userAgent
+      };
+      var body = Object.keys(data).map(function (k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+      }).join('&');
+
+      note.className = 'rv-note';
+      note.textContent = 'Sending…';
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body
+      }).then(function (r) {
+        if (!r.ok) throw new Error(r.status);
+        note.className = 'rv-note ok';
+        note.textContent = 'Got it — thank you.';
+        panel.querySelector('#rv-msg').value = '';
+        setTimeout(function () { close(); note.textContent = ''; }, 1500);
+      }).catch(function () {
+        note.className = 'rv-note err';
+        note.textContent = 'Could not send. Screenshot it and send it by message instead.';
+      });
+    }
+  })();
+
   var stored = read();
   if (stored === 'granted') {
     loadAnalytics();

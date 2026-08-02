@@ -69,6 +69,27 @@ Les pages Home, About, Services, Contact, Terms, Privacy, `/ai/` et 404 sont du 
    force `eol=lf`. Sans ces deux réglages, OneDrive et les fins de ligne font apparaître une
    dizaine de fichiers « modifiés » à chaque livraison, et les vrais changements s'y noient.
 
+## Widget de retours (préversion uniquement)
+
+Un bouton « A remark on this page » s'affiche en bas à droite, **uniquement sur
+`*.netlify.app`** — il ne peut donc jamais apparaître sur negoasia.com. Il est injecté par
+`site.js` ; son formulaire est déclaré statiquement dans `site/forms.html`, page noindex qui
+n'existe que pour que Netlify le détecte au build. **Ne pas supprimer `forms.html`** : sans
+lui, les envois partent dans le vide sans erreur visible. Les retours arrivent dans
+Netlify → Forms → `review`. Chaque retour arrive avec l'URL, la **section** et le
+**type d'élément** en clair (« Stats › Key figure »), un **extrait du texte visé** et un
+**sélecteur CSS** qui permet de retrouver l'élément exact par script. Au survol d'un
+paragraphe, d'un titre, d'une puce ou d'un chiffre, un liseré doré et une pastille
+apparaissent : Nicolas désigne, il n'a plus à décrire.
+
+## Cache
+
+Les noms de fichiers ne sont **pas** hachés. Le `netlify.toml` en tient compte : polices
+figées un an, mais **CSS et JS en `must-revalidate`**. Ne jamais remettre un `max-age`
+long sur `/assets/css/` ou `/assets/js/` sans mettre en place un hachage des noms — sinon
+une correction de design ne parvient jamais aux visiteurs qui ont l'ancienne feuille en
+cache. C'est arrivé le 01/08.
+
 ## Design system
 
 Marine `#152238` / `#1B2B44` / `#22344F` · or `#C2A063` et `#D8BE8A` · crème `#F4EFE4` et

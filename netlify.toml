@@ -24,16 +24,36 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
 
-# Fonts, CSS, JS and images are content-addressed by deploy — cache them hard.
+# Cache policy, by how often each kind of file actually changes.
+#
+# ⚠️ Filenames here are NOT content-hashed, so a long max-age without
+# revalidation means a returning visitor keeps a stale stylesheet until it
+# expires — which is exactly what happened on 2026-08-01: the portrait shipped
+# but the CSS that styles it did not reach browsers that had cached the old one.
+# Netlify serves strong ETags, so must-revalidate costs one cheap 304, no more.
+
+# Fonts genuinely never change. Safe to pin for a year.
 [[headers]]
   for = "/assets/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# Stylesheet and script change with every design fix. Always revalidate.
 [[headers]]
-  for = "/assets/*"
+  for = "/assets/css/*"
   [headers.values]
-    Cache-Control = "public, max-age=604800"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Images are replaced from the CMS and by make_og.py. One hour, then revalidate.
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
 
 # The CMS must never be indexed.
 [[headers]]

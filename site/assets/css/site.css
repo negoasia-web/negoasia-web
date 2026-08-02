@@ -511,7 +511,69 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
    subject reads as grounded rather than pasted into a box.
    ============================================================ */
 .photo.cutout{background:none;border:0;align-items:flex-end;justify-content:center;overflow:visible}
-.photo.cutout img{width:100%;height:100%;object-fit:contain;object-position:bottom center}
+.photo.cutout img{width:100%;height:100%;object-fit:contain;object-position:bottom center;
+  /* Le portrait est coupé à la taille : sans fondu, l'arête franche flotte dans le
+     marine. Le masque le fait se dissoudre dans le fond, quelle que soit la hauteur
+     du conteneur. */
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 68%,rgba(0,0,0,.55) 86%,transparent 99%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 68%,rgba(0,0,0,.55) 86%,transparent 99%)}
+/* La vignette ronde de l'auteur est recadrée sur le visage : pas de fondu. */
+.author .photo.cutout img{-webkit-mask-image:none;mask-image:none}
 /* Round author thumbnail: crop to the face, on a navy disc. */
 .author .photo.cutout{background:var(--slate-800);border:1px solid var(--line);overflow:hidden}
 .author .photo.cutout img{object-fit:cover;object-position:center}
+
+/* ============================================================
+   Review widget — preview only. Injected by site.js and shown
+   solely on *.netlify.app, so it can never reach the live domain.
+   Purpose: capture the page URL automatically, which is the one
+   thing that always gets lost when feedback arrives by WhatsApp.
+   ============================================================ */
+.rv-btn{position:fixed;right:22px;bottom:22px;z-index:90;background:var(--gold);color:var(--slate-900);
+  border:0;border-radius:2px;font-family:"Libre Franklin",sans-serif;font-weight:700;font-size:.82rem;
+  letter-spacing:.02em;padding:.9em 1.4em;cursor:pointer;box-shadow:0 8px 26px rgba(21,34,56,.32);
+  display:flex;align-items:center;gap:.55rem;transition:background .2s,transform .2s}
+.rv-btn:hover{background:#b08f52;transform:translateY(-1px)}
+.rv-btn svg{width:15px;height:15px;flex:none}
+.rv-panel{position:fixed;right:22px;bottom:22px;z-index:91;width:min(420px,calc(100vw - 44px));
+  background:var(--ivory-2);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:2px;
+  box-shadow:0 22px 60px rgba(21,34,56,.34);padding:24px 24px 22px;display:none}
+.rv-panel.in{display:block}
+.rv-panel h3{font-size:1.08rem;margin-bottom:.3rem}
+.rv-panel .sub{font-size:.84rem;color:var(--muted);margin-bottom:1.1rem;line-height:1.5}
+.rv-panel .ctx{font-size:.78rem;letter-spacing:.02em;color:var(--gold);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-weight:700;background:rgba(194,160,99,.12);border:1px solid var(--line-gold);border-radius:2px;
+  padding:.5em .7em;margin-bottom:1rem;word-break:break-all}
+.rv-panel label{display:block;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--muted);font-weight:700;margin-bottom:.4rem}
+.rv-panel input[type=text],.rv-panel textarea{width:100%;background:#fff;border:1px solid var(--line);
+  border-radius:2px;padding:11px 13px;font-family:inherit;font-size:.94rem;color:var(--ink);margin-bottom:.9rem}
+.rv-panel textarea{min-height:96px;resize:vertical}
+.rv-panel input:focus,.rv-panel textarea:focus{outline:none;border-color:var(--gold)}
+.rv-actions{display:flex;gap:9px;align-items:center}
+.rv-actions .btn{font-size:.8rem;padding:.72em 1.3em}
+.rv-close{margin-left:auto;background:none;border:0;font:inherit;font-size:.84rem;color:var(--muted);cursor:pointer}
+.rv-close:hover{color:var(--ink)}
+.rv-note{font-size:.82rem;color:var(--muted);margin-top:.8rem;min-height:1.1em}
+.rv-note.ok{color:#3d7a4e;font-weight:600}
+.rv-note.err{color:#a8412f;font-weight:600}
+@media (max-width:520px){
+  .rv-btn{right:14px;bottom:14px;padding:.85em 1.15em;font-size:.78rem}
+  .rv-panel{right:10px;left:10px;bottom:10px;width:auto;padding:20px 18px 18px;max-height:86vh;overflow:auto}
+}
+
+/* Pointer sur un élément précis : Nicolas désigne le paragraphe plutôt que de
+   le décrire. Survol → liseré doré + pastille ; clic → le panneau s'ouvre avec
+   la section, le type d'élément et un extrait du texte déjà remplis. */
+.rv-hi{outline:2px solid var(--gold)!important;outline-offset:4px;border-radius:2px;
+  cursor:pointer;background:rgba(194,160,99,.07)}
+.rv-mark{position:absolute;z-index:89;width:26px;height:26px;border-radius:50%;background:var(--gold);
+  color:var(--slate-900);border:0;cursor:pointer;display:none;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(21,34,56,.35);padding:0}
+.rv-mark.in{display:flex}
+.rv-mark svg{width:13px;height:13px}
+.rv-mark:hover{background:#b08f52}
+.rv-panel .ctx b{display:block;color:var(--ink);font-family:"Libre Franklin",sans-serif;
+  font-weight:600;font-size:.86rem;margin-top:.35rem;letter-spacing:0}
+.rv-toggle{font-size:.78rem;color:var(--muted);margin-bottom:1rem;display:flex;gap:.5rem;align-items:center}
+.rv-toggle input{width:15px;height:15px;accent-color:var(--gold)}
