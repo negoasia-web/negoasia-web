@@ -529,13 +529,16 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
    Purpose: capture the page URL automatically, which is the one
    thing that always gets lost when feedback arrives by WhatsApp.
    ============================================================ */
-.rv-btn{position:fixed;right:22px;bottom:22px;z-index:90;background:var(--gold);color:var(--slate-900);
+/* --cc-h est la hauteur de la bannière cookies, publiée par site.js. Sans ce
+   décalage, sur téléphone le bouton se posait pile sur le bouton « Accept » :
+   or sur or, invisible. C'est ce qui l'a fait passer pour absent le 02/08. */
+.rv-btn{position:fixed;right:22px;bottom:calc(22px + var(--cc-h, 0px));z-index:90;background:var(--gold);color:var(--slate-900);
   border:0;border-radius:2px;font-family:"Libre Franklin",sans-serif;font-weight:700;font-size:.82rem;
   letter-spacing:.02em;padding:.9em 1.4em;cursor:pointer;box-shadow:0 8px 26px rgba(21,34,56,.32);
   display:flex;align-items:center;gap:.55rem;transition:background .2s,transform .2s}
 .rv-btn:hover{background:#b08f52;transform:translateY(-1px)}
 .rv-btn svg{width:15px;height:15px;flex:none}
-.rv-panel{position:fixed;right:22px;bottom:22px;z-index:91;width:min(420px,calc(100vw - 44px));
+.rv-panel{position:fixed;right:22px;bottom:calc(22px + var(--cc-h, 0px));z-index:91;width:min(420px,calc(100vw - 44px));
   background:var(--ivory-2);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:2px;
   box-shadow:0 22px 60px rgba(21,34,56,.34);padding:24px 24px 22px;display:none}
 .rv-panel.in{display:block}
@@ -558,9 +561,26 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 .rv-note.ok{color:#3d7a4e;font-weight:600}
 .rv-note.err{color:#a8412f;font-weight:600}
 @media (max-width:520px){
-  .rv-btn{right:14px;bottom:14px;padding:.85em 1.15em;font-size:.78rem}
-  .rv-panel{right:10px;left:10px;bottom:10px;width:auto;padding:20px 18px 18px;max-height:86vh;overflow:auto}
+  .rv-btn{right:14px;bottom:calc(14px + var(--cc-h, 0px));padding:.85em 1.15em;font-size:.78rem}
+  .rv-panel{right:10px;left:10px;bottom:calc(10px + var(--cc-h, 0px));width:auto;padding:20px 18px 18px;
+    max-height:76vh;overflow:auto}
 }
+
+/* Mode « désigner » — tactile. Un doigt ne survole pas : on tape le bouton,
+   le bandeau apparaît, le tap suivant choisit l'élément au lieu de suivre le
+   lien. Le bandeau se pose sous l'en-tête fixe, pas dessus. */
+.rv-bar{position:fixed;left:0;right:0;top:0;z-index:95;display:none;align-items:center;gap:10px;
+  flex-wrap:wrap;background:var(--slate-900);color:var(--ivory);padding:12px 16px;
+  font-family:"Libre Franklin",sans-serif;font-size:.82rem;line-height:1.35;
+  box-shadow:0 8px 26px rgba(21,34,56,.34);border-bottom:2px solid var(--gold)}
+.rv-bar.in{display:flex}
+.rv-bar span{flex:1 1 100%;font-weight:600}
+.rv-bar button{background:none;border:1px solid rgba(244,239,228,.35);color:var(--ivory);
+  border-radius:2px;font:inherit;font-size:.76rem;font-weight:700;padding:.55em 1em;cursor:pointer}
+.rv-bar button[data-rv="page"]{background:var(--gold);border-color:var(--gold);color:var(--slate-900)}
+body.rv-picking{-webkit-tap-highlight-color:rgba(194,160,99,.35)}
+body.rv-picking #hdr{display:none}
+.rv-btn.picking{background:var(--ivory);color:var(--slate-900);box-shadow:0 8px 26px rgba(21,34,56,.4)}
 
 /* Pointer sur un élément précis : Nicolas désigne le paragraphe plutôt que de
    le décrire. Survol → liseré doré + pastille ; clic → le panneau s'ouvre avec

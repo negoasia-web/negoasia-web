@@ -82,6 +82,12 @@ Netlify → Forms → `review`. Chaque retour arrive avec l'URL, la **section** 
 paragraphe, d'un titre, d'une puce ou d'un chiffre, un liseré doré et une pastille
 apparaissent : Nicolas désigne, il n'a plus à décrire.
 
+**Sur mobile**, un doigt ne survole pas : le bouton ouvre un mode « désigner »
+(bandeau en haut, en-tête masqué), et le tap suivant choisit l'élément au lieu de
+suivre le lien — l'interception se fait en phase de capture. Le bouton est décalé
+de `--cc-h`, la hauteur de la bannière cookies publiée par `site.js` : sans ce
+décalage il se posait pile sur le bouton « Accept », or sur or, donc invisible.
+
 ## Cache
 
 Les noms de fichiers ne sont **pas** hachés. Le `netlify.toml` en tient compte : polices

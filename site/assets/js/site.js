@@ -149,13 +149,24 @@
     return banner;
   }
 
+  /* La bannière est fixée en bas ; sur mobile elle occupe un quart de l'écran.
+     On publie sa hauteur pour que le bouton de retours se pose AU-DESSUS
+     plutôt que par-dessus le bouton « Accept » — c'est ce qui le rendait
+     invisible sur téléphone : or sur or, superposé. */
+  function ccHeight() {
+    var h = (banner && banner.classList.contains('in')) ? banner.offsetHeight : 0;
+    document.documentElement.style.setProperty('--cc-h', h ? h + 'px' : '0px');
+  }
+
   function showBanner() {
     var el = buildBanner();
-    requestAnimationFrame(function () { el.classList.add('in'); });
+    requestAnimationFrame(function () { el.classList.add('in'); ccHeight(); });
   }
   function hideBanner() {
     if (banner) banner.classList.remove('in');
+    ccHeight();
   }
+  addEventListener('resize', ccHeight);
 
   /* Footer link so the choice can always be changed — injected, not duplicated. */
   var footBottom = document.querySelector('.foot-bottom');
@@ -196,19 +207,86 @@
               'main .stat, main .svc, main .card, main .quote, main .step,' +
               'main .it, main .post, main .photo, main img, main dd, main summary';
 
-    var open = false, panel = null, target = null, hover = null;
+    var open = false, panel = null, target = null, hover = null, picking = false;
+
+    /* Un doigt ne survole pas. Sur téléphone, désigner un élément demande donc
+       un mode explicite : on tape le bouton, puis on tape l'endroit visé. */
+    var TOUCH = !matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    var ICON =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" ' +
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
 
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'rv-btn';
     btn.setAttribute('aria-expanded', 'false');
-    btn.innerHTML =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" ' +
-      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-      '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
-      'A remark';
-    btn.addEventListener('click', function () { openPanel(null); });
+    btn.innerHTML = ICON + 'A remark';
+    btn.addEventListener('click', function () {
+      if (!TOUCH) { openPanel(null); return; }
+      setPick(!picking);
+    });
     document.body.appendChild(btn);
+
+    /* Bandeau du mode « désigner », tactile uniquement. */
+    var bar = null;
+    function buildBar() {
+      if (bar) return bar;
+      bar = document.createElement('div');
+      bar.className = 'rv-bar';
+      bar.innerHTML =
+        '<span>Tap the part you want to comment on.</span>' +
+        '<button type="button" data-rv="page">The whole page</button>' +
+        '<button type="button" data-rv="cancel">Cancel</button>';
+      bar.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-rv]');
+        if (!b) return;
+        e.preventDefault();
+        e.stopPropagation();
+        var what = b.getAttribute('data-rv');
+        setPick(false);
+        if (what === 'page') openPanel(null);
+      });
+      document.body.appendChild(bar);
+      return bar;
+    }
+
+    function setPick(on) {
+      picking = on;
+      buildBar().classList.toggle('in', on);
+      document.body.classList.toggle('rv-picking', on);
+      btn.classList.toggle('picking', on);
+      btn.innerHTML = ICON + (on ? 'Cancel' : 'A remark');
+      if (!on) clearHover();
+    }
+
+    /* Capture : on intercepte le tap AVANT que le lien ne navigue. */
+    document.addEventListener('click', function (e) {
+      if (!picking) return;
+      if (e.target.closest('.rv-bar, .rv-btn, .rv-panel')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      var el = null;
+      if (!e.target.closest('header, footer, .cc')) {
+        /* Le fond d'une section ne correspond à aucun sélecteur fin : on
+           retombe alors sur la section elle-même, jamais sur rien. */
+        el = e.target.closest(SEL) || e.target.closest('main section, main article');
+      }
+      setPick(false);
+      openPanel(el);
+    }, true);
+
+    /* Retour visuel immédiat au doigt posé, avant même que le panneau s'ouvre. */
+    document.addEventListener('touchstart', function (e) {
+      if (!picking) return;
+      if (e.target.closest('.rv-bar, .rv-btn, .rv-panel, header, footer, .cc')) return;
+      var el = e.target.closest(SEL) || e.target.closest('main section, main article');
+      if (!el || el === hover) return;
+      if (hover) hover.classList.remove('rv-hi');
+      hover = el;
+      el.classList.add('rv-hi');
+    }, { passive: true, capture: true });
 
     /* Pastille flottante, une seule, repositionnée au survol. */
     var mark = document.createElement('button');
@@ -222,7 +300,7 @@
       e.stopPropagation();
       openPanel(hover);
     });
-    document.body.appendChild(mark);
+    if (!TOUCH) document.body.appendChild(mark);
 
     function clearHover() {
       if (hover) hover.classList.remove('rv-hi');
@@ -231,7 +309,9 @@
     }
 
     document.addEventListener('mouseover', function (e) {
-      if (open) return;
+      /* Safari mobile émule un mouseover au tap : sans ce garde-fou, un liseré
+         et une pastille apparaissent au hasard sous le doigt. */
+      if (TOUCH || open) return;
       if (e.target.closest('.rv-panel, .rv-btn, .rv-mark, header, footer, .cc')) return;
       var el = e.target.closest(SEL);
       if (!el || el === hover) return;
@@ -288,7 +368,8 @@
     ];
     var TAGS = { H1: 'Main heading', H2: 'Heading', H3: 'Sub-heading', P: 'Paragraph',
                  LI: 'List item', BLOCKQUOTE: 'Pull quote', IMG: 'Image',
-                 DD: 'Detail line', SUMMARY: 'FAQ question' };
+                 DD: 'Detail line', SUMMARY: 'FAQ question',
+                 SECTION: 'Section', ARTICLE: 'Section' };
 
     function labelOf(el) {
       for (var i = 0; i < LABELS.length; i++) {
@@ -299,7 +380,9 @@
 
     function describe(el) {
       if (!el) return { where: '', selector: '', excerpt: '', label: 'The page as a whole' };
-      var txt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+      /* innerText plutôt que textContent : il respecte les sauts de ligne, sinon
+         un chiffre et sa légende se collent — « $1B+In negotiations coached ». */
+      var txt = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
       if (!txt && el.tagName === 'IMG') txt = '[image] ' + (el.getAttribute('alt') || '');
       if (!txt && el.classList.contains('photo')) txt = '[photo placeholder]';
       var excerpt = txt.length > 140 ? txt.slice(0, 140) + '…' : txt;
@@ -353,7 +436,10 @@
       panel.classList.add('in');
       btn.style.display = 'none';
       mark.classList.remove('in');
-      if (hover) hover.classList.remove('rv-hi');
+      /* On garde le liseré sur l'élément visé pendant la saisie : au doigt,
+         c'est la seule confirmation de ce qu'on est en train de commenter. */
+      if (hover && hover !== el) hover.classList.remove('rv-hi');
+      if (el) { el.classList.add('rv-hi'); hover = el; }
       open = true;
       btn.setAttribute('aria-expanded', 'true');
       panel.querySelector('#rv-msg').focus();
