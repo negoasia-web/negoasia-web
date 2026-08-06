@@ -223,20 +223,21 @@
     btn.className = 'rv-btn';
     btn.setAttribute('aria-expanded', 'false');
     btn.innerHTML = ICON + 'A remark';
-    btn.addEventListener('click', function () {
-      if (!TOUCH) { openPanel(null); return; }
-      setPick(!picking);
-    });
+    /* Le bouton ouvre le mode « désigner », souris comprise. Le retour sur la
+       page entière reste accessible depuis le bandeau. */
+    btn.addEventListener('click', function () { setPick(!picking); });
     document.body.appendChild(btn);
 
-    /* Bandeau du mode « désigner », tactile uniquement. */
+    /* Bandeau du mode « désigner ». Il vaut aussi pour la souris : viser une
+       pastille de 26 px était une épreuve d'adresse, et le liseré s'éteignait
+       en route. Ici, un clic n'importe où dans l'élément suffit. */
     var bar = null;
     function buildBar() {
       if (bar) return bar;
       bar = document.createElement('div');
       bar.className = 'rv-bar';
       bar.innerHTML =
-        '<span>Tap the part you want to comment on.</span>' +
+        '<span>' + (TOUCH ? 'Tap' : 'Click') + ' anywhere on the part you want to comment on.</span>' +
         '<button type="button" data-rv="page">The whole page</button>' +
         '<button type="button" data-rv="cancel">Cancel</button>';
       bar.addEventListener('click', function (e) {
@@ -258,6 +259,9 @@
       document.body.classList.toggle('rv-picking', on);
       btn.classList.toggle('picking', on);
       btn.innerHTML = ICON + (on ? 'Cancel' : 'A remark');
+      /* En mode désigner la pastille n'a plus d'objet : tout l'élément est
+         cliquable. La laisser afficherait une cible là où il n'y en a plus. */
+      mark.classList.remove('in');
       if (!on) clearHover();
     }
 
@@ -303,9 +307,22 @@
     if (!TOUCH) document.body.appendChild(mark);
 
     function clearHover() {
+      cancelClear();
       if (hover) hover.classList.remove('rv-hi');
       hover = null;
       mark.classList.remove('in');
+    }
+
+    /* Sursis avant extinction. Pour atteindre la pastille, la souris doit
+       forcément quitter l'élément ; sans ce délai, le liseré et la pastille
+       s'éteignent dans l'intervalle et la cible se dérobe. */
+    var clearT = null;
+    function scheduleClear() {
+      if (clearT) return;
+      clearT = setTimeout(function () { clearT = null; clearHover(); }, 320);
+    }
+    function cancelClear() {
+      if (clearT) { clearTimeout(clearT); clearT = null; }
     }
 
     document.addEventListener('mouseover', function (e) {
@@ -313,21 +330,28 @@
          et une pastille apparaissent au hasard sous le doigt. */
       if (TOUCH || open) return;
       /* La pastille et le panneau font partie du geste : y entrer ne doit pas
-         éteindre le liseré. L'en-tête, le pied et la bannière, si. */
-      if (e.target.closest('.rv-panel, .rv-btn, .rv-mark')) return;
-      if (e.target.closest('header, footer, .cc')) { clearHover(); return; }
+         éteindre le liseré. */
+      if (e.target.closest('.rv-panel, .rv-btn, .rv-mark, .rv-bar')) { cancelClear(); return; }
+      if (e.target.closest('header, footer, .cc')) { scheduleClear(); return; }
       var el = e.target.closest(SEL);
-      if (!el) { clearHover(); return; }
+      if (!el) { scheduleClear(); return; }
+      cancelClear();
       if (el === hover) return;
       if (hover) hover.classList.remove('rv-hi');
       hover = el;
       el.classList.add('rv-hi');
+      if (picking) { mark.classList.remove('in'); return; }
+      /* La pastille chevauche le coin de l'élément au lieu de flotter à 34 px
+         à sa gauche : plus d'espace mort à franchir pour l'atteindre. */
       var r = el.getBoundingClientRect();
-      mark.style.top = (r.top + scrollY - 9) + 'px';
-      mark.style.left = (r.left + scrollX - 34) + 'px';
+      mark.style.top = Math.max(scrollY + 4, r.top + scrollY - 13) + 'px';
+      mark.style.left = Math.max(4, r.left + scrollX - 13) + 'px';
       mark.classList.add('in');
     });
-    addEventListener('scroll', function () { if (!open) clearHover(); }, { passive: true });
+    /* Pas d'extinction au défilement. La pastille est positionnée en
+       coordonnées de document : elle reste collée à son élément quand la page
+       bouge. L'éteindre ici faisait disparaître la cible au moindre coup de
+       molette pendant qu'on visait — c'est ce que Bruno a signalé le 04/08. */
 
     /* Chemin CSS court, pour retrouver l'élément exact plus tard. */
     function path(el) {

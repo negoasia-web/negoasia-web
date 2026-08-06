@@ -580,6 +580,10 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 .rv-bar button[data-rv="page"]{background:var(--gold);border-color:var(--gold);color:var(--slate-900)}
 body.rv-picking{-webkit-tap-highlight-color:rgba(194,160,99,.35)}
 body.rv-picking #hdr{display:none}
+/* Le curseur dit ce que le clic va faire : désigner, pas naviguer. */
+body.rv-picking,body.rv-picking *{cursor:crosshair!important}
+body.rv-picking .rv-bar,body.rv-picking .rv-bar *,
+body.rv-picking .rv-btn,body.rv-picking .rv-btn *{cursor:pointer!important}
 .rv-btn.picking{background:var(--ivory);color:var(--slate-900);box-shadow:0 8px 26px rgba(21,34,56,.4)}
 
 /* Pointer sur un élément précis : Nicolas désigne le paragraphe plutôt que de
