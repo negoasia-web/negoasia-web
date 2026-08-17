@@ -123,8 +123,11 @@ a{color:inherit;text-decoration:none}
 .hero p.lead{font-size:1.16rem;color:rgba(255,255,255,.8);max-width:40ch;margin-bottom:2.2rem;line-height:1.62}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
 .hero .photo{aspect-ratio:5/4;align-self:stretch}
-/* credential strip */
-.strip{border-top:1px solid var(--line-dark)}
+/* Bandeau AWARDS. Fond d'un cran plus clair que le hero (choix de Bruno, 17/08) :
+   le bandeau est à l'intérieur de la section hero, donc au même navy l'œil le lisait
+   comme du mobilier du titre et non comme une preuve autonome. Le changement de teinte
+   remplace le filet d'1 px, qui ferait ici une double arête. */
+.strip{background:var(--slate-700)}
 .strip-grid{display:grid;grid-template-columns:repeat(4,1fr)}
 /* Titre du bandeau, demandé par Bruno le 17/08 puis doublé de taille le même jour.
    À cette échelle il ne nomme plus la rangée, il l'annonce. */
