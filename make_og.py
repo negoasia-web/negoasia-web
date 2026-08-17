@@ -49,8 +49,8 @@ h1 .c{color:#D8BE8A}
     </svg><span class="wm"><span class="t">NEGO</span><b>ASIA</b></span>
   </div>
   <div>
-    <span class="eyebrow">Negotiation advisory &middot; Asia &amp; beyond</span>
-    <h1><span class="c">Control</span> your negotiations, or someone else will.</h1>
+    <span class="eyebrow eb-stack"><span>Negotiation advisory</span><span>M&amp;A &middot; HR &middot; Commercial</span><span>Asia &middot; Europe &middot; Americas</span></span>
+    <h1><span class="c">Control</span> your negotiations or someone else will.</h1>
   </div>
   <div class="bot"><span>LinkedIn Top Voice</span><span>TEDx Speaker</span><span>Stanford SDRM</span><span>Hall of Fame</span></div>
 </div></body></html>""").replace("B/assets", B + "/assets")

@@ -103,8 +103,22 @@ a{color:inherit;text-decoration:none}
 
 /* Hero — solid slate, photo right */
 .hero{background:var(--slate-900);color:#fff;padding:150px 0 0;position:relative}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;padding-bottom:60px}
+/* 1.2fr : la colonne de texte est élargie juste assez pour que le H1 tienne sur
+   TROIS lignes à partir de 1280 px, au lieu de laisser « will. » seul sur une
+   quatrième. Demandé par Bruno le 11/08. Élargir plutôt que réduire le corps :
+   la taille du titre est ce qui porte la page. */
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:64px;align-items:center;padding-bottom:60px}
 .hero h1{font-size:clamp(2.5rem,5vw,4.1rem);margin:.2rem 0 1.5rem;color:#fff;font-weight:900}
+/* Surtitre sur trois lignes : catégorie, domaines, zones. Demandé par Bruno le
+   17/08, et c'est plus lisible qu'une seule ligne de sept segments — chaque
+   groupe se lit d'un coup d'œil. Lignes courtes, donc l'interlettrage large
+   d'origine (.24em) est conservé. */
+.eb-stack{display:block}
+.eb-stack span{display:block;line-height:1.55}
+.eb-stack span:first-child{color:var(--gold)}
+.on-dark .eb-stack span:first-child{color:var(--gold-2)}
+.eb-stack span + span{opacity:.82}
+
 .hero h1 .c{color:var(--gold-2)}
 .hero p.lead{font-size:1.16rem;color:rgba(255,255,255,.8);max-width:40ch;margin-bottom:2.2rem;line-height:1.62}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
