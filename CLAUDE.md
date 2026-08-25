@@ -114,6 +114,12 @@ Trois conséquences techniques à ne pas défaire :
   descend à 1,7 Mo. Les petites images passent intactes. Au-delà de 7 Mo après réduction,
   l'envoi est refusé avec un message plutôt qu'un échec silencieux.
 
+**Le chemin inverse existe aussi** (25/08) : `?rv=<sélecteur CSS>` sur n'importe quelle
+page de la préversion amène le lecteur sur l'élément visé, le cerne du même liseré doré
+pendant six secondes, puis retire le paramètre de la barre d'adresse. C'est ce qui rend
+cliquable chaque ligne du rapport de retours envoyé à Nicolas : il ne cherche plus la
+correction, elle vient à lui. Même garde-fou que le widget — inactif hors `*.netlify.app`.
+
 **Sur mobile**, un doigt ne survole pas : le bouton ouvre un mode « désigner »
 (bandeau en haut, en-tête masqué), et le tap suivant choisit l'élément au lieu de
 suivre le lien — l'interception se fait en phase de capture. Le bouton est décalé

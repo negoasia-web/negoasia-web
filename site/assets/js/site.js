@@ -200,6 +200,47 @@
     if (!/\.netlify\.app$/.test(location.hostname)) return;
     if (location.pathname.indexOf('/admin') === 0) return;
 
+    /* Retour au point exact depuis le rapport de retours (25/08).
+       Le widget capture déjà un sélecteur CSS pour chaque remarque ; on peut
+       donc refaire le chemin dans l'autre sens : ?rv=<sélecteur> amène la page
+       sur l'élément visé et le cerne du même liseré doré que le survol. Le
+       paramètre est retiré de la barre d'adresse aussitôt, pour qu'un lien
+       partagé ensuite ne traîne pas un surlignage derrière lui. */
+    (function spotlight() {
+      var m = /[?&]rv=([^&]+)/.exec(location.search);
+      if (!m) return;
+      var sel;
+      try { sel = decodeURIComponent(m[1]); } catch (e) { return; }
+
+      /* Le navigateur restaure sa position au retour arrière ; sans ça il peut
+         reprendre la main juste après notre défilement et renvoyer en haut. */
+      try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+
+      var done = false;
+      function go() {
+        var el;
+        try { el = document.querySelector(sel); } catch (e) { return; }
+        if (!el) return;
+        /* Les blocs n'apparaissent qu'au défilement : on force celui qui nous
+           intéresse et ses parents à être visibles, sinon on irait vers un
+           élément transparent dont la hauteur n'est pas encore la bonne. */
+        var p = el;
+        while (p && p !== document.body) { p.classList.add('in'); p = p.parentElement; }
+        el.scrollIntoView({ block: 'center', behavior: done ? 'auto' : 'smooth' });
+        if (done) return;
+        done = true;
+        el.classList.add('rv-hi');
+        setTimeout(function () { el.classList.remove('rv-hi'); }, 6000);
+        try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+        /* Second passage : les images et les polices finissent de charger après
+           coup et décalent la page. On recale sans animation. */
+        addEventListener('load', function () { setTimeout(go, 250); });
+      }
+      /* `defer` garantit que le document est analysé ; inutile d'attendre
+         `load`, qui peut tarder de plusieurs secondes sur une image lourde. */
+      setTimeout(go, 120);
+    })();
+
     /* Élements sur lesquels Nicolas peut pointer. On vise le bloc de sens le
        plus fin — un paragraphe, un titre, une puce, une carte — pour qu'il
        n'ait plus à décrire où il regarde. */
