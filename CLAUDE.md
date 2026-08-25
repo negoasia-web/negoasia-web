@@ -68,6 +68,16 @@ Les pages Home, About, Services, Contact, Terms, Privacy, `/ai/` et 404 sont du 
 8. **Sur Windows** : `git config core.fileMode false` est déjà posé, et un `.gitattributes`
    force `eol=lf`. Sans ces deux réglages, OneDrive et les fins de ligne font apparaître une
    dizaine de fichiers « modifiés » à chaque livraison, et les vrais changements s'y noient.
+9. **Deux copies du projet existent : le disque de Bruno et la session Cowork.** Les
+   fichiers du site sont écrits dans la session puis recopiés sur le disque. Mais les
+   fichiers de configuration — `.gitignore`, `CLAUDE.md`, `netlify.toml` — sont aussi
+   édités depuis le poste, et **la copie de la session prend alors du retard sans que
+   rien ne le signale**. Recopier une version périmée efface la modification faite ici.
+   C'est arrivé le 25/08 : la ligne `_tmp/` du `.gitignore` a disparu d'une livraison,
+   et sans elle les 54 fichiers d'un ancien snapshot redevenaient candidats au prochain
+   `git add .`. **Avant d'écrire sur le disque un fichier que le poste peut avoir touché,
+   le relire depuis le disque et comparer.** Pour les pages du site, la session fait foi ;
+   pour la configuration, c'est le disque.
 
 ## Widget de retours (préversion uniquement)
 
