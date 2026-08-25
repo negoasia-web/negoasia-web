@@ -225,9 +225,19 @@
         }
       } catch (e) {}
 
-      var el = null, marked = false;
+      var el = null, marked = false, userMoved = false;
+
+      /* On écoute les gestes, pas l'événement `scroll` : nos propres sauts
+         déclenchent `scroll` et on s'arrêterait nous-mêmes au premier passage.
+         Un geste du lecteur, lui, met fin au recalage — sans quoi il serait
+         ramené au centre jusqu'à quatre fois pendant qu'il essaie de lire
+         autour, et par sauts secs, donc bien plus violemment qu'un glissement. */
+      ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (t) {
+        addEventListener(t, function () { userMoved = true; }, { passive: true, once: true });
+      });
 
       function aim() {
+        if (userMoved && marked) return true;
         try { el = el || document.querySelector(sel); } catch (e) { return false; }
         if (!el) return false;
         /* Les blocs n'apparaissent qu'au défilement : on force celui qui nous
@@ -235,10 +245,11 @@
            élément encore transparent. */
         var p = el;
         while (p && p !== document.body) { p.classList.add('in'); p = p.parentElement; }
-        /* `instant` et non `smooth` : la feuille de style pose
-           `scroll-behavior:smooth` sur `html`, or une animation de défilement
-           s'annule au moindre incident pendant le chargement — c'est ainsi
-           qu'on se retrouvait à 40 px du haut. Un saut sec ne s'annule pas. */
+        /* `instant` et non `auto` : `auto` s'en remet au `scroll-behavior:smooth`
+           posé sur `html` par la feuille de style, et une animation de
+           défilement s'annule au moindre incident pendant le chargement — c'est
+           ainsi qu'on se retrouvait à 40 px du haut. `instant` force le saut
+           sec, qui ne s'annule pas. */
         el.scrollIntoView({ block: 'center', behavior: 'instant' });
         if (!marked) {
           marked = true;
