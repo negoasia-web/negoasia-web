@@ -1,7 +1,7 @@
 # NegoAsia — site web
 
 Contexte pour Claude Code. Lis ce fichier avant toute modification.
-Dernière mise à jour : 2026-08-01.
+Dernière mise à jour : 2026-08-25.
 
 ## Le projet en trois lignes
 
@@ -21,6 +21,14 @@ l'ancien WordPress ; la bascule DNS n'a pas eu lieu.
 
 Chaîne de publication opérationnelle : `git push` sur `main` → Netlify lance
 `python3 build.py` → publie `site/`. Le CMS Decap est actif sur `/admin/`.
+
+**Le déploiement consomme des crédits Netlify** — 15 par build de production. L'offre
+gratuite en donne 300 par mois, soit 20 déploiements, et le plafond a bloqué la
+production le 17/08 : un `git push` a bien poussé sur GitHub, et Netlify a affiché
+`Skipped due to account credit usage exceeded` sans rien construire. Le compte est passé
+au plan **Personal** (9 $/mois, 1 000 crédits) le même jour. Si un jour un push ne
+déclenche plus rien, regarder les crédits **avant** de soupçonner le webhook : c'est la
+piste qui m'a fait perdre du temps ce jour-là.
 
 ## Architecture
 
