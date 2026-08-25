@@ -212,33 +212,56 @@
       var sel;
       try { sel = decodeURIComponent(m[1]); } catch (e) { return; }
 
-      /* Le navigateur restaure sa position au retour arrière ; sans ça il peut
-         reprendre la main juste après notre défilement et renvoyer en haut. */
-      try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+      /* Le navigateur restaure sa position au chargement, et cette restauration
+         arrive APRÈS notre défilement : c'est ce qui ramenait la page en haut.
+         On la suspend, puis on la rétablit — le réglage survit à la page qui l'a
+         posé, donc le laisser sur `manual` casserait le retour arrière pour tout
+         le reste de l'onglet. */
+      var restore = null;
+      try {
+        if ('scrollRestoration' in history) {
+          restore = history.scrollRestoration;
+          history.scrollRestoration = 'manual';
+        }
+      } catch (e) {}
 
-      var done = false;
-      function go() {
-        var el;
-        try { el = document.querySelector(sel); } catch (e) { return; }
-        if (!el) return;
+      var el = null, marked = false;
+
+      function aim() {
+        try { el = el || document.querySelector(sel); } catch (e) { return false; }
+        if (!el) return false;
         /* Les blocs n'apparaissent qu'au défilement : on force celui qui nous
-           intéresse et ses parents à être visibles, sinon on irait vers un
-           élément transparent dont la hauteur n'est pas encore la bonne. */
+           intéresse et ses parents à être visibles, sinon on viserait un
+           élément encore transparent. */
         var p = el;
         while (p && p !== document.body) { p.classList.add('in'); p = p.parentElement; }
-        el.scrollIntoView({ block: 'center', behavior: done ? 'auto' : 'smooth' });
-        if (done) return;
-        done = true;
-        el.classList.add('rv-hi');
-        setTimeout(function () { el.classList.remove('rv-hi'); }, 6000);
-        try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
-        /* Second passage : les images et les polices finissent de charger après
-           coup et décalent la page. On recale sans animation. */
-        addEventListener('load', function () { setTimeout(go, 250); });
+        /* `instant` et non `smooth` : la feuille de style pose
+           `scroll-behavior:smooth` sur `html`, or une animation de défilement
+           s'annule au moindre incident pendant le chargement — c'est ainsi
+           qu'on se retrouvait à 40 px du haut. Un saut sec ne s'annule pas. */
+        el.scrollIntoView({ block: 'center', behavior: 'instant' });
+        if (!marked) {
+          marked = true;
+          el.classList.add('rv-hi');
+          setTimeout(function () { el.classList.remove('rv-hi'); }, 6000);
+          try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+        }
+        return true;
       }
-      /* `defer` garantit que le document est analysé ; inutile d'attendre
-         `load`, qui peut tarder de plusieurs secondes sur une image lourde. */
-      setTimeout(go, 120);
+
+      /* On revise plusieurs fois : les polices et les images arrivent après coup
+         et décalent la page de quelques dizaines de pixels, et le chargement
+         peut reprendre la main entre-temps. Le dernier passage rend la
+         restauration au navigateur. */
+      var when = [0, 250, 700, 1400, 2400];
+      when.forEach(function (d, k) {
+        setTimeout(function () {
+          aim();
+          if (k === when.length - 1) {
+            try { if (restore !== null) history.scrollRestoration = restore; } catch (e) {}
+          }
+        }, d);
+      });
     })();
 
     /* Élements sur lesquels Nicolas peut pointer. On vise le bloc de sens le
