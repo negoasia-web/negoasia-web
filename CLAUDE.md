@@ -128,6 +128,13 @@ formulaire — donc les retours de Nicolas comme les demandes d'audit. L'adresse
 est dans `NegoAsia-Projet.md` : ce dépôt est public, et une adresse écrite en clair
 dans un fichier indexé par GitHub finit chez les moissonneurs.
 
+**Le connecteur MCP Netlify ne voit pas ce projet.** Il est authentifié sur un autre
+compte ; `negoasia-web` appartient à **Team Negoasia**, qui ne contient que lui. Ce que
+le MCP renvoie concerne donc un autre compte — il a déjà ramené un `negoasia-preview`
+annoncé « forms: not enabled », ce qui ressemble au piège ci-dessus mais ne dit
+strictement rien du site en ligne. **Pour contrôler la chaîne réelle, ouvrir le log de
+déploiement dans l'interface Netlify**, pas le MCP.
+
 ## Cache
 
 Les noms de fichiers ne sont **pas** hachés. Le `netlify.toml` en tient compte : polices
