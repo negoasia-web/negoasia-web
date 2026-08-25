@@ -626,7 +626,14 @@
       var body = new FormData();
       Object.keys(data).forEach(function (k) { body.append(k, data[k]); });
       if (image) {
-        var ext = (image.type === 'image/png') ? 'png' : 'jpg';
+        /* Extension déduite du sous-type MIME, pas d'un ternaire : les images de
+           moins de 1,5 Mo passent intactes, donc un GIF, un WebP ou un SVG arrive
+           tel quel. Le nommer .jpg ne casse pas l'envoi — Netlify se fie au type
+           MIME — mais un fichier téléchargé depuis le tableau de bord porterait
+           une extension mensongère. */
+        var sub = ((image.type || '').split('/')[1] || '').split('+')[0].toLowerCase();
+        if (sub === 'jpeg') sub = 'jpg';
+        var ext = /^[a-z0-9]{1,5}$/.test(sub) ? sub : 'png';
         body.append('image', image, 'remark-' + Date.now() + '.' + ext);
       }
 
