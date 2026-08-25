@@ -278,6 +278,11 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 .page-hero h1{font-size:clamp(2.2rem,4.4vw,3.5rem);color:#fff;font-weight:900;margin-bottom:1.4rem}
 .page-hero h1 .c{color:var(--gold-2)}
 .page-hero p.lead{font-size:1.14rem;color:rgba(255,255,255,.8);max-width:56ch;line-height:1.62}
+/* Sous-titre du hero /about/, demandé par Nicolas le 25/08 : le H1 porte le slogan,
+   cette ligne porte la promesse. Doré et en Archivo pour qu'elle ne se confonde ni
+   avec le titre au-dessus ni avec le chapeau en dessous. */
+.page-hero .ph-sub{font-family:"Archivo",sans-serif;font-weight:700;font-size:clamp(1.02rem,1.5vw,1.24rem);
+  color:var(--gold-2);line-height:1.4;max-width:34ch;margin:-.55rem 0 1.25rem}
 .page-hero .hero-cta{margin-top:2.2rem}
 .page-hero.with-photo .ph-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;padding-bottom:70px}
 .page-hero.with-photo .photo{aspect-ratio:4/5;align-self:stretch}
