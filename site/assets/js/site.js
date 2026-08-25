@@ -435,6 +435,17 @@
         '<div class="ctx" id="rv-ctx"></div>' +
         '<label for="rv-msg">What would you change?</label>' +
         '<textarea id="rv-msg" placeholder="What bothers you, and what you would put instead."></textarea>' +
+        '<label>Add an image (optional)</label>' +
+        '<div class="rv-drop" id="rv-drop">' +
+          '<input type="file" id="rv-img" accept="image/*" hidden>' +
+          '<p class="rv-drop-hint" id="rv-drop-hint">Paste a screenshot, drop an image here, or ' +
+            '<button type="button" id="rv-pick">choose a file</button>.</p>' +
+          '<div class="rv-thumb" id="rv-thumb" hidden>' +
+            '<img id="rv-thumb-img" alt="">' +
+            '<span id="rv-thumb-meta"></span>' +
+            '<button type="button" id="rv-rm" aria-label="Remove the image">Remove</button>' +
+          '</div>' +
+        '</div>' +
         '<label for="rv-who">From (optional)</label>' +
         '<input type="text" id="rv-who" placeholder="Nicolas">' +
         '<div class="rv-actions">' +
@@ -445,11 +456,112 @@
       document.body.appendChild(panel);
       panel.querySelector('#rv-cancel').addEventListener('click', close);
       panel.querySelector('#rv-send').addEventListener('click', send);
+
+      var input = panel.querySelector('#rv-img');
+      var drop  = panel.querySelector('#rv-drop');
+      panel.querySelector('#rv-pick').addEventListener('click', function () { input.click(); });
+      panel.querySelector('#rv-rm').addEventListener('click', clearImage);
+      input.addEventListener('change', function () { if (input.files[0]) takeImage(input.files[0]); });
+
+      /* Coller : c'est le geste réel — capture d'écran, Ctrl+V. L'écoute est sur
+         le panneau entier parce que le curseur est dans la zone de texte à
+         l'ouverture, pas sur la zone d'image. */
+      panel.addEventListener('paste', function (e) {
+        var items = (e.clipboardData || {}).items || [];
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].type && items[i].type.indexOf('image/') === 0) {
+            var f = items[i].getAsFile();
+            if (f) { e.preventDefault(); takeImage(f); return; }
+          }
+        }
+      });
+
+      ['dragenter', 'dragover'].forEach(function (t) {
+        drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('over'); });
+      });
+      ['dragleave', 'drop'].forEach(function (t) {
+        drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.remove('over'); });
+      });
+      drop.addEventListener('drop', function (e) {
+        var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (f) takeImage(f);
+      });
       try {
         var who = localStorage.getItem('negoasia-reviewer');
         if (who) panel.querySelector('#rv-who').value = who;
       } catch (e) {}
       addEventListener('keydown', function (e) { if (e.key === 'Escape' && open) close(); });
+    }
+
+    /* Netlify plafonne la requête entière à 8 Mo et coupe l'envoi à 30 s. Une
+       capture d'écran de portable dépasse régulièrement les deux. On réduit donc
+       côté navigateur : largeur ramenée à 2000 px, ce qui reste largement lisible
+       pour du texte de page web, et ré-encodage JPEG seulement si le fichier est
+       gros. Un petit PNG net est laissé intact. */
+    var MAX_W = 2000, SHRINK_OVER = 1.5 * 1024 * 1024, HARD_MAX = 7 * 1024 * 1024;
+    var image = null, imageURL = null;
+
+    function fmtSize(b) {
+      return b < 1024 * 1024 ? Math.round(b / 1024) + ' KB'
+                             : (b / 1024 / 1024).toFixed(1) + ' MB';
+    }
+
+    function setNote(cls, txt) {
+      var note = panel.querySelector('#rv-note');
+      note.className = 'rv-note' + (cls ? ' ' + cls : '');
+      note.textContent = txt;
+    }
+
+    function takeImage(file) {
+      if (!file.type || file.type.indexOf('image/') !== 0) {
+        setNote('err', 'That is not an image.');
+        return;
+      }
+      shrink(file).then(function (blob) {
+        if (blob.size > HARD_MAX) {
+          setNote('err', 'That image is too large to send (' + fmtSize(blob.size) + ').');
+          return;
+        }
+        clearImage();
+        image = blob;
+        imageURL = URL.createObjectURL(blob);
+        panel.querySelector('#rv-thumb-img').src = imageURL;
+        panel.querySelector('#rv-thumb-meta').textContent = fmtSize(blob.size);
+        panel.querySelector('#rv-thumb').hidden = false;
+        panel.querySelector('#rv-drop-hint').hidden = true;
+        setNote('', '');
+      });
+    }
+
+    function clearImage() {
+      if (imageURL) { URL.revokeObjectURL(imageURL); imageURL = null; }
+      image = null;
+      if (!panel) return;
+      panel.querySelector('#rv-img').value = '';
+      panel.querySelector('#rv-thumb').hidden = true;
+      panel.querySelector('#rv-thumb-img').removeAttribute('src');
+      panel.querySelector('#rv-drop-hint').hidden = false;
+    }
+
+    function shrink(file) {
+      return new Promise(function (resolve) {
+        if (file.size <= SHRINK_OVER) { resolve(file); return; }
+        var url = URL.createObjectURL(file);
+        var img = new Image();
+        img.onload = function () {
+          var scale = Math.min(1, MAX_W / img.naturalWidth);
+          var c = document.createElement('canvas');
+          c.width  = Math.round(img.naturalWidth  * scale);
+          c.height = Math.round(img.naturalHeight * scale);
+          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+          URL.revokeObjectURL(url);
+          c.toBlob(function (blob) {
+            resolve(blob && blob.size < file.size ? blob : file);
+          }, 'image/jpeg', 0.9);
+        };
+        img.onerror = function () { URL.revokeObjectURL(url); resolve(file); };
+        img.src = url;
+      });
     }
 
     function openPanel(el) {
@@ -480,6 +592,7 @@
       btn.setAttribute('aria-expanded', 'false');
       open = false;
       target = null;
+      clearImage();
       clearHover();
     }
 
@@ -506,21 +619,25 @@
         viewport: innerWidth + 'x' + innerHeight,
         useragent: navigator.userAgent
       };
-      var body = Object.keys(data).map(function (k) {
-        return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
-      }).join('&');
+      /* FormData et non urlencoded, parce qu'un fichier ne se code pas en
+         chaîne de requête. Et surtout : PAS d'en-tête Content-Type. Le
+         navigateur doit poser lui-même le multipart avec sa frontière ; l'écrire
+         à la main casse l'envoi côté Netlify. */
+      var body = new FormData();
+      Object.keys(data).forEach(function (k) { body.append(k, data[k]); });
+      if (image) {
+        var ext = (image.type === 'image/png') ? 'png' : 'jpg';
+        body.append('image', image, 'remark-' + Date.now() + '.' + ext);
+      }
 
       note.className = 'rv-note';
-      note.textContent = 'Sending…';
-      fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body
-      }).then(function (r) {
+      note.textContent = image ? 'Sending the image…' : 'Sending…';
+      fetch('/', { method: 'POST', body: body }).then(function (r) {
         if (!r.ok) throw new Error(r.status);
         note.className = 'rv-note ok';
         note.textContent = 'Got it — thank you.';
         panel.querySelector('#rv-msg').value = '';
+        clearImage();
         setTimeout(function () { close(); note.textContent = ''; }, 1500);
       }).catch(function () {
         note.className = 'rv-note err';

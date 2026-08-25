@@ -100,6 +100,20 @@ Netlify → Forms → `review`. Chaque retour arrive avec l'URL, la **section** 
 paragraphe, d'un titre, d'une puce ou d'un chiffre, un liseré doré et une pastille
 apparaissent : Nicolas désigne, il n'a plus à décrire.
 
+**Une image peut être jointe au retour** (25/08), une seule par envoi : collage
+(`Ctrl+V` d'une capture d'écran, le geste visé), glisser-déposer, ou choix de fichier.
+Trois conséquences techniques à ne pas défaire :
+
+- Le champ `image` doit rester **déclaré dans `forms.html`**, avec
+  `enctype="multipart/form-data"` sur le `<form>`. Un champ ajouté seulement côté JS
+  n'est pas vu au build, et le fichier repartirait dans le vide.
+- L'envoi se fait en **`FormData`, sans en-tête `Content-Type`**. C'est le navigateur qui
+  pose le multipart et sa frontière ; l'écrire à la main casse l'envoi côté Netlify.
+- **Netlify plafonne la requête à 8 Mo et coupe à 30 s.** `site.js` réduit donc les images
+  de plus de 1,5 Mo à 2000 px de large en JPEG 0,9 — mesuré : un PNG de 5,4 Mo en 3200 px
+  descend à 1,7 Mo. Les petites images passent intactes. Au-delà de 7 Mo après réduction,
+  l'envoi est refusé avec un message plutôt qu'un échec silencieux.
+
 **Sur mobile**, un doigt ne survole pas : le bouton ouvre un mode « désigner »
 (bandeau en haut, en-tête masqué), et le tap suivant choisit l'élément au lieu de
 suivre le lien — l'interception se fait en phase de capture. Le bouton est décalé

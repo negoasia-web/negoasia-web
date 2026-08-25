@@ -11,7 +11,11 @@
      This page exists only to declare it. Nothing links here, it is noindex,
      and it is never shown to a visitor. Do not delete it: without it the
      review button silently posts into the void. -->
-<form name="review" data-netlify="true" netlify-honeypot="bot-field" hidden>
+<!-- enctype + input file : Netlify n'accepte un fichier que si le formulaire
+     DÉCLARÉ ici le prévoit. Un champ ajouté seulement côté JS serait ignoré au
+     build, et l'image partirait dans le vide comme les envois de juillet. -->
+<form name="review" data-netlify="true" netlify-honeypot="bot-field"
+      enctype="multipart/form-data" hidden>
   <input type="hidden" name="form-name" value="review">
   <input name="bot-field">
   <input name="page">
@@ -22,6 +26,7 @@
   <input name="author">
   <input name="viewport">
   <input name="useragent">
+  <input name="image" type="file">
 </form>
 </body>
 </html>

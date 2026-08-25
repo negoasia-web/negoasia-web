@@ -614,6 +614,22 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 .rv-actions .btn{font-size:.8rem;padding:.72em 1.3em}
 .rv-close{margin-left:auto;background:none;border:0;font:inherit;font-size:.84rem;color:var(--muted);cursor:pointer}
 .rv-close:hover{color:var(--ink)}
+/* Zone d'image du widget (25/08). Le geste visé est le collage : Nicolas fait
+   une capture d'écran et fait Ctrl+V. Le choix de fichier et le glisser-déposer
+   ne sont là que pour les cas où le collage n'est pas possible. */
+.rv-drop{border:1px dashed var(--line);border-radius:2px;padding:12px;margin-bottom:1rem;
+  background:#fff;transition:border-color .2s,background .2s}
+.rv-drop.over{border-color:var(--gold);background:var(--ivory-2)}
+.rv-drop-hint{font-size:.8rem;color:var(--muted);line-height:1.5;margin:0}
+.rv-drop-hint button{background:none;border:0;padding:0;font:inherit;color:var(--gold);
+  font-weight:600;text-decoration:underline;cursor:pointer}
+.rv-thumb{display:flex;align-items:center;gap:10px}
+.rv-thumb img{width:64px;height:64px;object-fit:cover;border:1px solid var(--line);flex:none}
+.rv-thumb span{font-size:.76rem;color:var(--muted)}
+.rv-thumb button{margin-left:auto;background:none;border:0;font:inherit;font-size:.76rem;
+  color:var(--muted);text-decoration:underline;cursor:pointer;padding:4px}
+.rv-thumb button:hover{color:#a8412f}
+
 .rv-note{font-size:.82rem;color:var(--muted);margin-top:.8rem;min-height:1.1em}
 .rv-note.ok{color:#3d7a4e;font-weight:600}
 .rv-note.err{color:#a8412f;font-weight:600}
