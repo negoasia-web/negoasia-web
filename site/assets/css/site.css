@@ -146,12 +146,11 @@ a{color:inherit;text-decoration:none}
    Grille de 6 colonnes plutôt que 3 : chaque item en occupe 2, ce qui permet de
    centrer les deux du bas en les décalant d'une colonne. Avec 3 colonnes, les
    deux derniers resteraient collés à gauche. */
+/* Sans filets (Bruno, 26/08) : les cinq recompenses se separent par le vide seul.
+   Le border-right herite de .strip-grid .it, il faut donc l'annuler explicitement. */
 .strip-grid.five{grid-template-columns:repeat(6,1fr);row-gap:0}
-.strip-grid.five .it{padding:24px 14px;grid-column:span 2;border-right:1px solid var(--line-dark)}
-.strip-grid.five .it:nth-child(3){border-right:0}
-.strip-grid.five .it:nth-child(-n+3){border-bottom:1px solid var(--line-dark)}
+.strip-grid.five .it{padding:24px 14px;grid-column:span 2;border:0}
 .strip-grid.five .it:nth-child(4){grid-column:2 / span 2}
-.strip-grid.five .it:nth-child(5){border-right:0}
 .strip-grid.five .it b{font-size:1rem;line-height:1.25}
 .strip-grid.five .it span{font-size:.68rem;letter-spacing:.11em;line-height:1.5}
 .strip-grid .it{padding:26px 10px;text-align:center;border-right:1px solid var(--line-dark)}
@@ -467,15 +466,12 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
      de largeur, décalé, au milieu de quatre pleines largeurs. Une colonne règle
      tout et se lit mieux : titre et libellé sur une seule ligne chacun. */
   .strip-grid.five{grid-template-columns:1fr}
-  .strip-grid.five .it{grid-column:1 / -1;border-right:0;padding:18px 14px}
+  .strip-grid.five .it{grid-column:1 / -1;border:0;padding:18px 14px}
   /* nth-child(4) porte « grid-column:2 / span 2 » en desktop, et un sélecteur
      nth-child est plus spécifique que .it : sans ce reset explicite, il réclame
      une colonne 2 inexistante, la grille en fabrique une, et les cinq cellules
      se retrouvent à 123 px de large. */
   .strip-grid.five .it:nth-child(4){grid-column:1 / -1}
-  .strip-grid.five .it:nth-child(-n+4){border-bottom:1px solid var(--line-dark)}
-  .strip-grid.five .it:nth-child(3),
-  .strip-grid.five .it:nth-child(5){border-right:0}
   .strip-head{font-size:1.16rem;padding:26px 0 4px}
   .stats-grid{grid-template-columns:1fr 1fr;gap:34px}
   .stat+.stat{border-left:0}
