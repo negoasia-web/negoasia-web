@@ -1,7 +1,7 @@
 # NegoAsia — site web
 
 Contexte pour Claude Code. Lis ce fichier avant toute modification.
-Dernière mise à jour : 2026-08-25.
+Dernière mise à jour : 2026-08-26.
 
 ## Le projet en trois lignes
 
@@ -166,7 +166,9 @@ cache. C'est arrivé le 01/08.
 ## Design system
 
 Marine `#152238` / `#1B2B44` / `#22344F` · or `#C2A063` et `#D8BE8A` · crème `#F4EFE4` et
-`#FAF6EC` · encre `#1D2636` · gris `#6A7080` · bleu du monogramme `#3B78E6`. **Pas de noir.**
+`#FAF6EC` · encre `#1D2636` · gris `#6A7080` · bleu du monogramme `#012CA4`. **Pas de noir
+dans le site** — seule exception, le mot-symbole du logo livré par Nicolas le 26/08, qui est
+en noir pur. Fichier de marque du client : ne pas le recolorer sans son accord.
 Titres en Archivo, corps en Libre Franklin, **auto-hébergées** dans `site/assets/fonts/`
 (aucun appel à Google Fonts). Largeur max 1200px, sections 104px, rayon des bords 2px.
 
@@ -183,5 +185,8 @@ La liste à jour est dans le README. Les trois pièges :
 
 ## Ce qui manque côté client
 
-Les photos de Nicolas (portrait pro + ambiances) et son logo vectoriel. Les emplacements
-sont des placeholders rayés. C'est le principal levier restant sur le rendu premium.
+Les photos de Nicolas (portrait pro + ambiances). Les emplacements sont des placeholders
+rayés. Le logo est arrivé le 26/08 en PNG haute définition (7663 × 1197, deux déclinaisons :
+mot-symbole noir + monogramme bleu pour les fonds clairs, tout blanc pour les fonds marine).
+Il reste à demander le **vectoriel** (SVG ou AI) : les PNG suffisent au web mais pas à
+une impression ni à un agrandissement.

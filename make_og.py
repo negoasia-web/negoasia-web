@@ -27,9 +27,7 @@ body::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
   background:repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 14px,rgba(255,255,255,.045) 14px 28px)}
 .txt{position:absolute;inset:78px auto 74px 84px;width:640px;display:flex;flex-direction:column;justify-content:space-between;z-index:3}
 .top{display:flex;align-items:center;gap:13px}
-.top svg{width:40px;height:40px;color:#3B78E6}
-.wm{font-family:"Archivo",sans-serif;font-size:1.55rem;letter-spacing:.05em}
-.wm .t{font-weight:500}.wm b{font-weight:800}
+.top img{height:56px;width:auto;display:block}
 .eyebrow{font-size:.84rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#D8BE8A;margin-bottom:22px;display:block}
 h1{font-family:"Archivo",sans-serif;font-weight:900;font-size:3.5rem;line-height:1.04;letter-spacing:-.02em}
 h1 .c{color:#D8BE8A}
@@ -43,16 +41,12 @@ h1 .c{color:#D8BE8A}
 <div class="pf"><img src="B/assets/img/blog/nicolas-clement-image.webp"></div>
 <div class="fade"></div>
 <div class="txt">
-  <div class="top">
-    <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 35 V18 a4.2 4.2 0 0 1 7.4 -2.7 L32 27"/><path d="M33 13 V30 a4.2 4.2 0 0 1 -7.4 2.7 L16 21"/>
-    </svg><span class="wm"><span class="t">NEGO</span><b>ASIA</b></span>
-  </div>
+  <div class="top"><img class="lg" src="B/assets/img/logo-negoasia-white.png" alt=""></div>
   <div>
     <span class="eyebrow eb-stack"><span>Negotiation advisory</span><span>M&amp;A &middot; HR &middot; Commercial</span><span>Asia &middot; Europe &middot; Americas</span></span>
     <h1><span class="c">Control</span> your negotiations or someone else will.</h1>
   </div>
-  <div class="bot"><span>LinkedIn Top Voice</span><span>TEDx Speaker</span><span>Stanford SDRM</span><span>Hall of Fame</span></div>
+  <div class="bot"><span>Hall of Fame</span><span>TEDx Speaker</span><span>LinkedIn Top Voice</span><span>APM Asia expert</span></div>
 </div></body></html>""").replace("B/assets", B + "/assets")
 
 with sync_playwright() as p:
