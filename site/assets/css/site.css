@@ -75,6 +75,13 @@ a{color:inherit;text-decoration:none}
 
 /* Logo */
 .brand{display:flex;align-items:center;gap:12px}
+/* Logo fourni par Nicolas le 25/08. Deux fichiers, un par fond : le mot est en
+   encre sur le crème de l'en-tête, en blanc sur le marine du pied de page. Un
+   seul fichier blanc aurait disparu dans l'en-tête, et un seul fichier sombre
+   dans le pied. La hauteur est fixée, la largeur suit le rapport 968×152. */
+.brand .lg{height:34px;width:auto;display:block}
+.foot-brand .brand .lg{height:38px}
+@media (max-width:860px){.brand .lg{height:30px}}
 .brand .mk{width:32px;height:32px;flex:none;color:var(--blue)}
 .brand .wm{font-family:"Archivo",sans-serif;font-size:1.24rem;letter-spacing:.04em}
 .brand .wm b{font-weight:800}.brand .wm .t{font-weight:500}
