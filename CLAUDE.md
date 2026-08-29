@@ -1,7 +1,7 @@
 # NegoAsia — site web
 
 Contexte pour Claude Code. Lis ce fichier avant toute modification.
-Dernière mise à jour : 2026-08-26.
+Dernière mise à jour : 2026-08-29.
 
 ## Le projet en trois lignes
 
@@ -86,6 +86,15 @@ Les pages Home, About, Services, Contact, Terms, Privacy, `/ai/` et 404 sont du 
    `git add .`. **Avant d'écrire sur le disque un fichier que le poste peut avoir touché,
    le relire depuis le disque et comparer.** Pour les pages du site, la session fait foi ;
    pour la configuration, c'est le disque.
+10. **Aucune commande `git` depuis le pont Cowork, même en lecture.** Le pont n'a pas le
+    droit d'effacer des fichiers sur le disque. Or `git status` crée puis supprime
+    `.git/index.lock` : la création passe, la suppression échoue, et **un verrou vide reste
+    en place qui bloque tout `git add` et tout `git commit` ultérieurs**, y compris ceux de
+    Claude Code. C'est arrivé le 29/08. Le symptôme est un message d'erreur qui parle de
+    `index.lock` et non de ce qu'on essayait de faire, donc facile à mal diagnostiquer.
+    Le pont sert à lire et à écrire des fichiers ; **Git se pilote depuis Claude Code**,
+    jamais d'ici. Si un verrou périmé traîne, il se renomme (le renommage, lui, est
+    autorisé) et se supprime ensuite côté Windows.
 
 ## Widget de retours (préversion uniquement)
 
