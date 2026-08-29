@@ -137,7 +137,7 @@ Trois conséquences techniques à ne pas défaire :
   l'envoi est refusé avec un message plutôt qu'un échec silencieux.
 
 **Écrire une remarque ne l'envoie plus** (29/08). Elle entre dans un **panier local**
-que Nicolas relit, modifie, recible et complète page après page, puis envoie d'un seul
+que Nicolas relit, modifie et complète page après page, puis envoie d'un seul
 geste. C'est la réponse au 25/08 : deux remarques sur le même sous-titre à quatre
 minutes d'écart, sans moyen de savoir laquelle il voulait garder. Cinq points à ne pas
 défaire :

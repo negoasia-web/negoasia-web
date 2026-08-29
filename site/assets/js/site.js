@@ -283,7 +283,7 @@
               'main .it, main .post, main .photo, main img, main dd, main summary';
 
     var open = false, panel = null, target = null, hover = null, picking = false;
-    var editing = null, retargeting = null;
+    var editing = null;
 
     /* Un doigt ne survole pas. Sur téléphone, désigner un élément demande donc
        un mode explicite : on tape le bouton, puis on tape l'endroit visé. */
@@ -354,13 +354,6 @@
         el = e.target.closest(SEL) || e.target.closest('main section, main article');
       }
       setPick(false);
-      /* Reciblage : le clic ne cree pas une remarque, il deplace celle qu'on
-         est en train de reviser sur un autre element. */
-      if (retargeting) {
-        var rec = retargeting; retargeting = null;
-        openPanel(el, rec);
-        return;
-      }
       openPanel(el);
     }, true);
 
@@ -508,7 +501,7 @@
 
     /* ------------------------------------------------------------------
        LE PANIER (29/08). Écrire une remarque ne l'envoie plus : elle entre
-       dans une liste locale que Nicolas relit, modifie, recible et complète
+       dans une liste locale que Nicolas relit, modifie et complète
        autant qu'il veut, page après page, puis envoie d'un seul geste.
        C'est la réponse au 25 août, où deux remarques sur le même sous-titre
        à quatre minutes d'écart m'ont laissé arbitrer seul lequel des deux
@@ -692,7 +685,6 @@
         ? '<button type="button" data-a="see" data-id="' + r.id + '">View on the site</button>'
         : '<button type="button" data-a="edit" data-id="' + r.id + '">Edit</button>' +
           '<button type="button" data-a="see" data-id="' + r.id + '">View</button>' +
-          '<button type="button" data-a="aim" data-id="' + r.id + '">Re-target</button>' +
           '<button type="button" class="del" data-a="del" data-id="' + r.id + '">Delete</button>';
       return '<article class="rv-row" id="row-' + r.id + '">' +
         '<div class="rv-row-hd">' +
@@ -796,16 +788,6 @@
         openPanel(r.sel ? safeQuery(r.sel) : null, r);
         return;
       }
-      if (a === 'aim') {
-        closeList();
-        if (r.path !== location.pathname) {
-          try { sessionStorage.setItem('negoasia-rv-aim', id); } catch (e2) {}
-          location.href = r.path;
-          return;
-        }
-        retargeting = r;
-        setPick(true);
-      }
     }
 
     function find(id) {
@@ -818,23 +800,15 @@
       try { return document.querySelector(sel); } catch (e) { return null; }
     }
 
-    /* Reprise après changement de page : « Modifier » et « Recibler » sur une
-       remarque posée ailleurs traversent la navigation par sessionStorage. */
+    /* Reprise après changement de page : « Edit » sur une remarque posée
+       ailleurs traverse la navigation par sessionStorage. */
     (function resume() {
       var id;
       try { id = sessionStorage.getItem('negoasia-rv-edit'); } catch (e) { return; }
-      if (id) {
-        try { sessionStorage.removeItem('negoasia-rv-edit'); } catch (e) {}
-        var r = find(id);
-        if (r) setTimeout(function () { openPanel(r.sel ? safeQuery(r.sel) : null, r); }, 700);
-        return;
-      }
-      try { id = sessionStorage.getItem('negoasia-rv-aim'); } catch (e) { return; }
-      if (id) {
-        try { sessionStorage.removeItem('negoasia-rv-aim'); } catch (e) {}
-        var r2 = find(id);
-        if (r2) setTimeout(function () { retargeting = r2; setPick(true); }, 700);
-      }
+      if (!id) return;
+      try { sessionStorage.removeItem('negoasia-rv-edit'); } catch (e) {}
+      var r = find(id);
+      if (r) setTimeout(function () { openPanel(r.sel ? safeQuery(r.sel) : null, r); }, 700);
     })();
 
     /* État des remarques envoyées : on relit la page telle qu'elle est
