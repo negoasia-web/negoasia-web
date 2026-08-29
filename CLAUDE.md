@@ -136,6 +136,31 @@ Trois conséquences techniques à ne pas défaire :
   descend à 1,7 Mo. Les petites images passent intactes. Au-delà de 7 Mo après réduction,
   l'envoi est refusé avec un message plutôt qu'un échec silencieux.
 
+**Écrire une remarque ne l'envoie plus** (29/08). Elle entre dans un **panier local**
+que Nicolas relit, modifie, recible et complète page après page, puis envoie d'un seul
+geste. C'est la réponse au 25/08 : deux remarques sur le même sous-titre à quatre
+minutes d'écart, sans moyen de savoir laquelle il voulait garder. Cinq points à ne pas
+défaire :
+
+- **Le panier vit dans `localStorage` (`negoasia-remarks-v1`), les images dans
+  IndexedDB** (`negoasia-rv`, magasin `img`). Une capture réduite pèse encore 1,7 Mo et
+  `localStorage` plafonne à 5 Mo pour tout le domaine : deux captures suffiraient à faire
+  échouer l'écriture du panier lui-même, sans erreur visible.
+- **S'il vise un élément déjà commenté et non envoyé**, le formulaire affiche sa remarque
+  précédente et lui laisse le choix — *Replace it* ou *Add a second one*. C'est lui qui
+  tranche, sur le moment, au lieu de me laisser arbitrer quatre jours plus tard.
+- **L'envoi est une requête par remarque, en série**, avec un identifiant de lot commun
+  (`batch`, déclaré dans `forms.html`). Pas d'envoi groupé en une requête : Netlify
+  plafonne à 8 Mo, et trois captures suffiraient à dépasser. Une ligne ne quitte le panier
+  que si SON envoi a réussi ; une coupure au milieu laisse les suivantes en place.
+- **L'onglet « Sent » relit le site** et affiche pour chaque remarque envoyée *Changed*,
+  *Unchanged* ou *Not found*, avec le texte actuel. Même origine, donc un `fetch` de la
+  page suffit. La comparaison retire tout ce qui n'est pas alphanumérique des deux côtés :
+  l'extrait a été capturé avec `innerText`, la relecture se fait sur un document parsé, et
+  les espaces ne tombent pas aux mêmes endroits.
+- **`beforeunload` prévient** s'il ferme l'onglet avec des remarques non envoyées, et le
+  texte en cours de frappe est sauvegardé dans `sessionStorage` au fil de la saisie.
+
 **Le chemin inverse existe aussi** (25/08) : `?rv=<sélecteur CSS>` sur n'importe quelle
 page de la préversion amène le lecteur sur l'élément visé, le cerne du même liseré doré
 pendant six secondes, puis retire le paramètre de la barre d'adresse. C'est ce qui rend

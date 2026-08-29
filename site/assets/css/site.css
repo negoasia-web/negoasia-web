@@ -704,3 +704,87 @@ body.rv-picking .rv-btn,body.rv-picking .rv-btn *{cursor:pointer!important}
   font-weight:600;font-size:.86rem;margin-top:.35rem;letter-spacing:0}
 .rv-toggle{font-size:.78rem;color:var(--muted);margin-bottom:1rem;display:flex;gap:.5rem;align-items:center}
 .rv-toggle input{width:15px;height:15px;accent-color:var(--gold)}
+
+/* ---- Le panier de retours (29/08) ------------------------------------
+   Ecrire une remarque ne l'envoie plus : elle entre dans une liste que
+   Nicolas relit et modifie autant qu'il veut avant d'envoyer le lot. */
+.rv-listbtn{position:fixed;right:22px;bottom:calc(74px + var(--cc-h, 0px));z-index:90;
+  background:var(--ivory);color:var(--slate-900);border:1px solid var(--line);
+  font-family:"Libre Franklin",sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.02em;
+  padding:.7em 1.1em;border-radius:2px;cursor:pointer;box-shadow:0 6px 20px rgba(21,34,56,.18);
+  display:flex;align-items:center;gap:8px;transition:background .2s,transform .2s}
+.rv-listbtn:hover{transform:translateY(-1px)}
+.rv-listbtn b{background:var(--gold);color:var(--slate-900);border-radius:999px;
+  min-width:20px;padding:1px 6px;text-align:center;font-variant-numeric:tabular-nums}
+.rv-listbtn .q{font-weight:500;color:var(--muted)}
+.rv-listbtn.has{border-color:var(--gold)}
+
+body.rv-lock{overflow:hidden}
+.rv-list{position:fixed;inset:0;z-index:96;display:none;background:rgba(21,34,56,.55);
+  padding:24px;overflow:auto}
+.rv-list.in{display:block}
+.rv-list-in{max-width:760px;margin:0 auto;background:var(--ivory-2);border:1px solid var(--line);
+  border-radius:2px;box-shadow:0 24px 70px rgba(21,34,56,.35);overflow:hidden}
+.rv-list-hd{display:flex;align-items:center;gap:12px;padding:18px 22px;background:var(--slate-900)}
+.rv-list-hd h3{color:#fff;font-size:1.1rem;flex:1}
+.rv-x{background:none;border:0;color:rgba(255,255,255,.75);font-size:1.7rem;line-height:1;
+  cursor:pointer;padding:0 4px}
+.rv-x:hover{color:#fff}
+.rv-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);background:#fff}
+.rv-tab{flex:1;background:none;border:0;border-bottom:2px solid transparent;font:inherit;
+  font-weight:700;font-size:.82rem;padding:12px 10px;color:var(--muted);cursor:pointer}
+.rv-tab[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--gold)}
+.rv-rows{padding:16px 18px;max-height:min(62vh,620px);overflow:auto}
+.rv-none{font-size:.86rem;color:var(--muted);text-align:center;padding:34px 10px;margin:0}
+
+.rv-row{background:#fff;border:1px solid var(--line);border-left:3px solid var(--gold);
+  padding:13px 15px;margin-bottom:10px}
+.rv-row-hd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+.rv-where{font-family:"Archivo",sans-serif;font-weight:800;font-size:.74rem;color:var(--gold);
+  flex:1;min-width:180px}
+.rv-when{font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.rv-state{font-family:"Archivo",sans-serif;font-weight:800;font-size:.62rem;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 8px;border-radius:2px;background:rgba(29,38,54,.07);color:var(--muted)}
+.rv-state.ok{background:rgba(61,122,78,.12);color:#3d7a4e}
+.rv-state.warn{background:rgba(168,65,47,.10);color:#a8412f}
+.rv-ex{font-size:.8rem;color:var(--muted);font-style:italic;margin-bottom:6px;line-height:1.5}
+.rv-msg{font-size:.9rem;line-height:1.55;white-space:pre-line}
+.rv-now{margin-top:9px;padding:9px 11px;background:var(--ivory-2);border:1px solid var(--line);
+  font-size:.82rem;color:var(--muted);line-height:1.5}
+.rv-now b{display:block;font-family:"Archivo",sans-serif;font-weight:800;font-size:.6rem;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.rv-img{margin-top:9px}
+.rv-img img{max-width:160px;border:1px solid var(--line)}
+.rv-acts{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;padding-top:9px;border-top:1px solid var(--line)}
+.rv-acts button{background:none;border:0;padding:0;font:inherit;font-size:.78rem;font-weight:600;
+  color:var(--gold);cursor:pointer}
+.rv-acts button:hover{text-decoration:underline}
+.rv-acts button.del{color:var(--muted);margin-left:auto}
+.rv-acts button.del:hover{color:#a8412f}
+
+.rv-foot{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 18px;
+  border-top:1px solid var(--line);background:#fff}
+.rv-foot .btn{font-size:.82rem;padding:.72em 1.3em}
+.rv-foot .rv-close{margin-left:0}
+.rv-prog{flex:1 1 100%;font-size:.8rem;color:var(--muted);min-height:1.1em}
+.rv-prog.ok{color:#3d7a4e;font-weight:600}
+.rv-prog.err{color:#a8412f;font-weight:600}
+
+/* Deja une remarque en attente sur cet element : c'est le cas du 25 aout,
+   deux envois a quatre minutes d'ecart sur le meme sous-titre. */
+.rv-dup{background:var(--ivory-2);border:1px solid var(--gold);padding:11px 13px;margin-bottom:1rem}
+.rv-dup p{font-size:.78rem;margin:0 0 6px}
+.rv-dup blockquote{margin:0 0 9px;font-size:.85rem;line-height:1.5;color:var(--muted);
+  border-left:2px solid var(--line);padding-left:10px}
+.rv-dup-a{display:flex;gap:14px;flex-wrap:wrap}
+.rv-dup-a button{background:none;border:0;padding:0;font:inherit;font-size:.78rem;font-weight:700;
+  color:var(--gold);cursor:pointer}
+.rv-dup-a button:hover{text-decoration:underline}
+
+@media (max-width:700px){
+  .rv-listbtn{right:14px;bottom:calc(66px + var(--cc-h, 0px));font-size:.74rem;padding:.62em .9em}
+  .rv-list{padding:0}
+  .rv-list-in{min-height:100vh}
+  .rv-rows{max-height:none;padding:12px}
+  .rv-acts{gap:12px}
+}
