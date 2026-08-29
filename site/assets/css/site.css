@@ -379,6 +379,10 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 
 /* Three-up card row (values, principles) */
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+/* Quatre piliers (Nicolas, 29/08) : deux rangs de deux. A quatre colonnes sur
+   1200 px il ne reste que 200 px de texte par carte une fois les 34 px de marge
+   interieure retires, et les titres se cassent en quatre lignes. */
+.cards.four{grid-template-columns:repeat(2,1fr)}
 .card{border:1px solid var(--line);border-radius:2px;padding:40px 34px;background:#fff}
 .on-dark .card{border-color:var(--line-dark);background:rgba(255,255,255,.02)}
 .card .idx{font-family:"Archivo",sans-serif;font-size:.76rem;letter-spacing:.18em;color:var(--gold);font-weight:700}
@@ -499,6 +503,9 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
   .detail-grid{grid-template-columns:1fr;gap:38px}
   .steps{grid-template-columns:1fr 1fr}
   .cards{grid-template-columns:1fr}
+  /* .cards.four est plus specifique que .cards : sans ce rappel les quatre
+     piliers restaient sur deux colonnes de 170 px en mobile. */
+  .cards.four{grid-template-columns:1fr}
   .featured{grid-template-columns:1fr}
   .featured .thumb{min-height:240px}
   .featured .body{padding:38px 30px}
