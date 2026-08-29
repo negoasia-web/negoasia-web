@@ -95,6 +95,19 @@ Les pages Home, About, Services, Contact, Terms, Privacy, `/ai/` et 404 sont du 
     Le pont sert à lire et à écrire des fichiers ; **Git se pilote depuis Claude Code**,
     jamais d'ici. Si un verrou périmé traîne, il se renomme (le renommage, lui, est
     autorisé) et se supprime ensuite côté Windows.
+11. **Le texte fourni par Nicolas se recopie tel quel. Zéro retouche.** Pas de virgule
+    ajoutée ou retirée, pas de mot de liaison inséré, pas de majuscule modifiée, pas de
+    reformulation « qui coule mieux ». Sa ponctuation, ses capitales et son ordre de mots
+    font partie du texte. Trois exemples réels de ce qu'il ne faut plus faire, tous
+    trouvés le 29/08 dans ses retours du 25/08 :
+    « our structure**,** and our behaviors » recopié sans la virgule ;
+    « We have all been told negotiation is » recopié avec un « that » ajouté ;
+    « to stay or get back on track » réécrit en « to stay on track or get back on it ».
+    Chacune paraît anodine isolément ; ensemble elles font qu'un client relit sa page et
+    n'y reconnaît plus sa voix. **Si un texte semble fautif ou ambigu, on le pose tel quel
+    et on pose la question** — on ne corrige pas à sa place. Seule adaptation autorisée :
+    l'échappement HTML (`&amp;`, `&rsquo;`) et la casse quand elle est produite par le CSS
+    (`text-transform`), jamais dans la source.
 
 ## Widget de retours (préversion uniquement)
 
