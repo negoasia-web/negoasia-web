@@ -163,6 +163,13 @@ section{padding:104px 0}
 .sec-head{max-width:640px;margin-bottom:56px}
 .sec-head h2{font-size:clamp(2rem,3.6vw,2.95rem)}
 .sec-head p{color:var(--muted);font-size:1.06rem;margin-top:1rem}
+/* Chapo des services sur une seule ligne (Bruno, 26/08). La phrase reclame
+   810 px, la boite du .sec-head n'en donne que 640. On elargit la boite pour ce
+   seul bandeau et on rend au titre sa largeur d'origine : sans ce rappel il
+   passerait de deux lignes a une et la hierarchie tomberait a plat. Pas de
+   nowrap, la phrase doit pouvoir se replier sur les petites largeurs. */
+.services .sec-head{max-width:860px}
+.services .sec-head h2{max-width:640px}
 .on-dark .sec-head h2{color:#fff}
 .on-dark .sec-head p{color:rgba(255,255,255,.72)}
 
