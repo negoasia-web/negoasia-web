@@ -392,6 +392,13 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
    L'interlettrage descend de .18em a .10em, sinon « 01 — THE RIGHT TO SAY NO »
    deborde de la carte a cette taille. */
 .cards.four .idx{font-size:1.52rem;letter-spacing:.10em;line-height:1.2;display:block}
+@media (max-width:480px){
+  /* Sur telephone, .10em fait tomber « 02 — PREPARATION » sur deux lignes et laisse
+     le tiret pendre en fin de ligne. Interlettrage a zero : la taille doublee est
+     preservee, et seul « 01 — THE RIGHT TO SAY NO », trop long, reste sur deux
+     lignes — et il se coupe apres « RIGHT », pas apres le tiret. */
+  .cards.four .idx{letter-spacing:0}
+}
 .card h3{font-size:1.3rem;margin:1.1rem 0 .8rem}
 .on-dark .card h3{color:#fff}
 .card p{color:var(--muted);font-size:.98rem}
