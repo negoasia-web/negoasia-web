@@ -386,6 +386,12 @@ footer{background:var(--slate-900);color:rgba(255,255,255,.7);padding:70px 0 34p
 .card{border:1px solid var(--line);border-radius:2px;padding:40px 34px;background:#fff}
 .on-dark .card{border-color:var(--line-dark);background:rgba(255,255,255,.02)}
 .card .idx{font-family:"Archivo",sans-serif;font-size:.76rem;letter-spacing:.18em;color:var(--gold);font-weight:700}
+/* Intitules des quatre piliers doubles (Nicolas via Bruno, 29/08) : 0,76 -> 1,52rem.
+   Limite aux piliers : la meme carte sert les six contextes de /services/, ou des
+   libelles comme « ENTERPRISE SALES » passeraient a deux lignes dans 289 px.
+   L'interlettrage descend de .18em a .10em, sinon « 01 — THE RIGHT TO SAY NO »
+   deborde de la carte a cette taille. */
+.cards.four .idx{font-size:1.52rem;letter-spacing:.10em;line-height:1.2;display:block}
 .card h3{font-size:1.3rem;margin:1.1rem 0 .8rem}
 .on-dark .card h3{color:#fff}
 .card p{color:var(--muted);font-size:.98rem}
