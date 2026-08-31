@@ -200,6 +200,16 @@
     if (!/\.netlify\.app$/.test(location.hostname)) return;
     if (location.pathname.indexOf('/admin') === 0) return;
 
+    /* DÉSACTIVÉ le 31/08. Nicolas ne commente plus dans la page : il travaille
+       dans le tableau Excel « NegoAsia-modifications.xlsx », un seul canal, une
+       seule source de vérité. Le bouton, le panneau et le panier ne sont donc
+       plus construits.
+       Ce qui suit reste actif, et doit le rester : le surlignage `?rv=` est ce
+       qui fait fonctionner la colonne « Voir » du tableau, un lien par ligne.
+       Le supprimer casserait le tableau sans que rien ne le signale.
+       Remettre ce drapeau à true réactive tout ; rien n'a été retiré. */
+    var WIDGET = false;
+
     /* Retour au point exact depuis le rapport de retours (25/08).
        Le widget capture déjà un sélecteur CSS pour chaque remarque ; on peut
        donc refaire le chemin dans l'autre sens : ?rv=<sélecteur> amène la page
@@ -274,6 +284,8 @@
         }, d);
       });
     })();
+
+    if (!WIDGET) return;
 
     /* Élements sur lesquels Nicolas peut pointer. On vise le bloc de sens le
        plus fin — un paragraphe, un titre, une puce, une carte — pour qu'il
